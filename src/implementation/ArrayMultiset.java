@@ -1,4 +1,4 @@
-package implementation;
+//package implementation;
 
 import java.util.List;
 
@@ -8,14 +8,75 @@ import java.util.List;
  *
  * @author Jeffrey Chan & Yongli Ren, RMIT 2020
  */
+
 public class ArrayMultiset extends RmitMultiset
 {
-
-    @Override
+	private String[] array;
+	
+	
+	public ArrayMultiset()
+	{
+		array = null;
+	}
+    
+	
+	@Override
 	public void add(String elem) {
         // Implement me!
-    } // end of add()
-
+		boolean existingElement = false;
+		
+		// if the array is empty, add the element at the first place
+    	if (array == null)
+    	{
+    		array = new String[2];
+    		array[0] = elem;
+    		array[1] = "1";
+    	}
+    	else
+    	{
+    		// if the new element is already present in the array, then just incrementing the instance count
+    		if (array[0].contentEquals(elem))
+    			array[1] = String.valueOf(Integer.parseInt(array[1]) + 1);
+    		
+    		else
+    		{
+    			// if the new element is already present in the array, then just incrementing the instance count
+    			for (int i = 0; i < array.length; i = i+2)
+    	       	{
+    	        	if (array[i].contentEquals(elem))
+    	        	{
+    	    			array[i+1] = String.valueOf(Integer.parseInt(array[i+1]) + 1);
+    	    			existingElement = true;
+    	    			break;
+    	        	}
+    	       	}
+    			// If the new element is not present already, then adding it at the end of the array
+    	        if (! existingElement)
+    	        {
+    	        	int newSize = array.length + 2;
+        			String[] newArray = new String[newSize];
+      
+        			for (int i = 0; i < array.length; i++) 
+        			{
+        	                newArray[i] = array[i];
+        	        }
+    	
+        			newArray[array.length] = elem;
+    	        	newArray[array.length + 1] = "1";
+    	        	
+    	        	array = newArray;
+    	  	    }
+    	       
+    		}
+    		
+    	}// end of add()
+    	
+//    	printing for testing purpose
+    	for (int i = 0; i < array.length; i = i+2)
+		{
+			System.out.println("Array Element: " + array[i] + "      Instance Count: " + array[i+1]);
+		}
+}
 
     @Override
 	public int search(String elem) {
