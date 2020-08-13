@@ -5,11 +5,13 @@ public class TreeNode{
 	private String val;
 	private TreeNode left;
 	private TreeNode right;
+	private TreeNode parent;
 	
 	public TreeNode() {
 		val = null;
 		left = null;
 		right = null;
+		parent = null;
 	}
 	
 	public TreeNode(String val) {
@@ -40,4 +42,11 @@ public class TreeNode{
 		this.right = right;
 	}
 
+	public TreeNode getParent() {
+		return parent;
+	}
+
+	public void setParent(TreeNode parent) {
+		this.parent = parent;
+	}
 }

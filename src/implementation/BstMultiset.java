@@ -2,9 +2,7 @@ package implementation;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.sun.tools.sjavac.comp.dependencies.PublicApiCollector;
-
+import java.util.Stack;
 
 /**
  * BST implementation of a multiset.  See comments in RmitMultiset to
@@ -49,15 +47,20 @@ public class BstMultiset extends RmitMultiset
 	private void appendTreeNode(TreeNode node, String item) {
     	
     	if(item.compareTo( node.getVal() ) < 0) {
-    		if( node.getLeft() == null )
-                node.setLeft( new TreeNode(item) );
+    		if( node.getLeft() == null ) {
+    			TreeNode childNode = new TreeNode(item);
+    			node.setLeft( childNode );
+    			childNode.setParent( node );
+    		}
             else {
             	this.appendTreeNode(node.getLeft(), item);
             }
     	}
     	else if( item.compareTo(node.getVal()) > 0 || item.compareTo(node.getVal()) == 0) {		// Need to discuss this condition
     		if ( node.getRight() == null ) {
-    			node.setRight(new TreeNode(item));
+    			TreeNode childNode = new TreeNode(item);
+    			node.setRight(childNode);
+    			childNode.setParent( node );
     		}
             else {
             	this.appendTreeNode(node.getRight(), item);
@@ -100,30 +103,52 @@ public class BstMultiset extends RmitMultiset
 	@Override
 	public List<String> searchByInstance(int instanceCount) {
 
+		// Reference : https://www.techiedelight.com/preorder-tree-traversal-iterative-recursive/
+		
 		List<String> retList = new ArrayList<String>();
 		
-		class InnerClass{
-    		public int occuranceCount = 0;
-    		public ArrayList<String> preorderList = new ArrayList<String>();
-    		
-    		public ArrayList<String> preorderTraversal(TreeNode node, String item) {
-    			
-    			prevNode = node;
-    			
-    			if( node != null ) {
-    				if(prevNode.getVal().compareTo(node.getVal()) == 0) {
-    					occuranceCount += 1;
-    				}else {
-    					
-    				}
-    	            this.preorderTraversal(node.getLeft(), item);
-    	            this.preorderTraversal(node.getRight(), item);
-    	        }
-
-				return this.preorderList;
-    		}
-    	}
+		if(this.getRoot() == null) {
+			return retList;
+		}
 		
+		int occuranceCount = 0;
+		Stack<TreeNode> poStack = new Stack<TreeNode>();
+		poStack.push(this.getRoot());
+		
+		while(! poStack.empty() ) {
+			
+			TreeNode currNode = poStack.pop();
+			String currNodeVal = currNode.getVal();
+			
+			if(retList.size() == 0) {
+				retList.add(currNode.getVal());
+				occuranceCount += 1;
+			}else {
+				
+				if( retList.get( retList.size() - 1).compareTo(currNodeVal) == 0) {
+					occuranceCount += 1;
+				}else if( retList.get( retList.size() - 1).compareTo(currNodeVal) < 0) {
+					
+					if(occuranceCount != instanceCount) {
+						retList.remove( retList.size() - 1);
+					}
+					
+					retList.add(currNodeVal);
+					occuranceCount = 1;
+				}
+				
+			}
+			
+			// If current tree node has right child, push that on stack
+			if(currNode.getRight() != null) {
+				poStack.push(currNode.getRight());
+			}
+			
+			if(currNode.getLeft() != null) {
+				poStack.push(currNode.getLeft());
+			}
+			
+		}
 		
         return null;
     } // end of searchByInstance    
@@ -156,7 +181,9 @@ public class BstMultiset extends RmitMultiset
 
     @Override
 	public void removeOne(String item) {
-        // Implement me!
+    	
+    	
+    	
     } // end of removeOne()
 
 
@@ -171,31 +198,154 @@ public class BstMultiset extends RmitMultiset
     @Override
 	public String printRange(String lower, String upper) {
 
-        // Placeholder, please update.
-        return new String();
+    	StringBuilder retStr = new StringBuilder();
+    	
+    	TreeNode t = getSmallestElementFromTree(this.getRoot());
+    	while(t != null && t.getVal().compareTo(upper) <= 0) {
+    		
+    		if(t.getVal().compareTo(lower) >= 0) {
+    			retStr.append(t.getVal()+",");
+    		}
+    	}
+    	
+        return retStr.toString();
     } // end of printRange()
 
 
     @Override
 	public RmitMultiset union(RmitMultiset other) {
 
-        return null;
+    	BstMultiset retSet = new BstMultiset();
+    	
+    	// Union of the multiset is the max multiplicity of an element from given multisets
+    	// Inorder traversal of a tree returns the the sorted list.
+    	
+    	TreeNode firstTreePtr = getSmallestElementFromTree(this.getRoot());
+    	TreeNode secTreePtr = getSmallestElementFromTree(((BstMultiset) other).getRoot());
+    	
+    	while(firstTreePtr != null && secTreePtr != null) {
+    		
+    		if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) < 0) {
+    			retSet.add( firstTreePtr.getVal() );
+    			firstTreePtr = getInoderSucc(firstTreePtr);
+    		}else if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) > 0) {
+    			retSet.add( secTreePtr.getVal() );
+    			secTreePtr = getInoderSucc(secTreePtr);
+    		}else if(firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) == 0) {
+    			retSet.add( firstTreePtr.getVal() );
+    			firstTreePtr = getInoderSucc(firstTreePtr);
+    			secTreePtr = getInoderSucc(secTreePtr);
+    		}
+    	}
+    	
+    	// Exhausted second tree but first tree has elements
+    	while(firstTreePtr != null) {
+    		retSet.add(firstTreePtr.getVal());
+    		firstTreePtr = getInoderSucc(firstTreePtr);
+    	}
+    	
+    	// Exhausted first free tree but second tree has elements
+    	while(secTreePtr != null) {
+    		retSet.add(secTreePtr.getVal());
+    		secTreePtr = getInoderSucc(secTreePtr);
+    	}
+    	
+        return retSet;
     } // end of union()
 
 
+    /*
+     * Find the inorder-successsor of the element
+     *
+     */
+    
+    private TreeNode getInoderSucc(TreeNode givenEle) {
+    	
+    	// Right subtree is not empty. in order successor is smallest element in the right substree.
+    	TreeNode t = givenEle;
+    	
+    	if(t.getRight() != null) {
+    		
+    		t = t.getRight();
+    		while(t.getLeft() != null) {
+    			t = t.getLeft();
+    		}
+    		
+    		return t;
+    	}
+    	
+    	// Right Subtree is empty. 
+    	// Start from given element. This is required to reduce the time complexity and well as same elements can occure in the multiset
+    	TreeNode parent = t.getParent();
+    	
+    	while(parent != null && parent.getRight() == t) {
+    		t = parent;
+    		parent = t.getParent();
+    	}
+    	
+    	return parent;
+    }
+    
+    private TreeNode getSmallestElementFromTree(TreeNode root){
+    	
+    	TreeNode t = root;
+    	while(t != null && t.getLeft() != null)
+    	{
+    		t = t.getLeft();
+    	}
+    	
+    	return t;
+    }
+    
     @Override
 	public RmitMultiset intersect(RmitMultiset other) {
 
-        // Placeholder, please update.
-        return null;
+    	BstMultiset retSet = new BstMultiset();
+    
+    	TreeNode firstTreePtr = getSmallestElementFromTree(this.getRoot());
+    	TreeNode secTreePtr = getSmallestElementFromTree(((BstMultiset) other).getRoot());
+    	
+    	while(firstTreePtr != null && secTreePtr != null) {
+    		
+    		if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) < 0) {
+    			firstTreePtr = getInoderSucc(firstTreePtr);
+    		}else if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) > 0) {
+    			secTreePtr = getInoderSucc(secTreePtr);
+    		}else if(firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) == 0) {
+    			retSet.add( firstTreePtr.getVal() );
+    			firstTreePtr = getInoderSucc(firstTreePtr);
+    			secTreePtr = getInoderSucc(secTreePtr);
+    		}
+    	}
+    	    	
+        return retSet;
+        
     } // end of intersect()
 
 
     @Override
 	public RmitMultiset difference(RmitMultiset other) {
-
-        // Placeholder, please update.
-        return null;
+    	
+    	BstMultiset retSet = new BstMultiset();
+    	
+    	TreeNode firstTreePtr = getSmallestElementFromTree(this.getRoot());
+    	TreeNode secTreePtr = getSmallestElementFromTree(((BstMultiset) other).getRoot());
+    	
+    	while(firstTreePtr != null && secTreePtr != null) {
+    		
+    		if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) < 0) {
+    			retSet.add( firstTreePtr.getVal() );
+    			firstTreePtr = getInoderSucc(firstTreePtr);
+    		}else if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) > 0) {
+    			secTreePtr = getInoderSucc(secTreePtr);
+    		}else if(firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) == 0) {
+    			firstTreePtr = getInoderSucc(firstTreePtr);
+    			secTreePtr = getInoderSucc(secTreePtr);
+    		}
+    	}
+    	    	
+        return retSet;
+    	
     } // end of difference()
 
 } // end of class BstMultiset
