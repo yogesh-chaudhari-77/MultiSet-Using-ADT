@@ -26,21 +26,36 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 		// If there is no list, create a head node
 		if(this.head == null) {
 			head = new ListNode(item);
+			return;
 		}else {
 
-			// List is already present and contains certains only one node - head
+			// List is already present
+
+			// case 1 : Insert at the beginning of the list
+			if(head.getVal().compareTo(item) > 0) {
+				ListNode newNode = new ListNode(item);
+				newNode.setNext(head);
+				head = newNode;
+				return;
+			}
+
+			// case 2 : List contains several elements, insert at middle or at the end.
 			ListNode prev = head;
 			ListNode curr = head;
 
 			while(curr != null) {
 
-				if(item.compareTo(curr.getVal()) < 0) {
-					
+				// Current element should be bigger than item. Otherwise check if the end of the list has reached.
+				if(item.compareTo(curr.getVal()) < 0 || (curr.getNext() == null)) {
+
 					ListNode newNode = new ListNode(item);
 					newNode.setNext(prev.getNext());
 					prev.setNext(newNode);
+
+					// We have added the new element. Return to caller.
+					return;
 				}
-				
+
 				prev = curr;
 				curr = curr.getNext();
 			}
@@ -53,23 +68,23 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 	public int search(String item) {
 
 		int occuranceCount = 0;
-		
+
 		// Check if the list is there or not
 		if(this.head != null) {
-			
+
 			ListNode currNode = head;
-			
-			// Iterate till end of the list is reached & current node value is less than provided item. List is ordered
-			while( (currNode != null) && (currNode.getVal().compareTo(item) < 0) ) {
-			
+
+			// Iterate till end of the list is reached & current node value is less than or equal to provided item. Taking advantage of ordered list
+			while( (currNode != null) && (currNode.getVal().compareTo(item) <= 0) ) {
+
 				if(currNode.getVal().compareTo(item) == 0) {
-					occuranceCount += 1; 
+					occuranceCount += 1;
 				}
-				
+
 				currNode = currNode.getNext();
 			}
 		}
-		
+
 		return occuranceCount;
 	} // end of search()
 
@@ -78,99 +93,116 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 	public List<String> searchByInstance(int instanceCount) {
 
 		List<String> retList = new ArrayList<String>();
-		
+
 		// Check if the list is there or not
 		if(this.head != null) {
-			
+
 			ListNode currNode = head;
 			String currNodeVal = currNode.getVal();
-			
+
 			int foundInstanceCount = 0;
 
 			// Iterate till end of the list is reached
 			while(currNode != null) {
-				
+
+				// Counting the occurance of an individual element.
 				if(currNode.getVal().compareTo(currNodeVal) == 0 ) {
 					foundInstanceCount += 1;
 				}else {
-					
+
+					// [1,1,1,2,3] current pointer is at 2
+					// If provided instanceCount matches with foundInstanceCount for 1 then add that to return list
 					if(instanceCount == foundInstanceCount) {
 						retList.add(currNodeVal);
 					}
-					
+
+					// Otherwise mark that element 2 is already present atleast for 1 time
 					foundInstanceCount = 1;
 					currNodeVal = currNode.getVal();
 				}
-				
+
+				// Advance to next node
 				currNode = currNode.getNext();
 			}
+			
+			// Boundry condition for last element
+			if(instanceCount == foundInstanceCount) {
+				retList.add(currNodeVal);
+			}
 		}
-		
+
 		return retList;
 	} // end of searchByInstance
 
 
 	@Override
 	public boolean contains(String item) {
-		
+
 		boolean contains = false;
-		
+
 		// Check if the list is there or not
 		if(this.head != null) {
-			
+
 			ListNode currNode = head;
-			
-			// Iterate till end of the list is reached & current node value is less than provided item. List is ordered
-			while( (currNode != null) && (currNode.getVal().compareTo(item) < 0) ) {
-			
+
+			// Iterate till end of the list is reached & current node value is less than or equal to provided item. List is ordered
+			while( (currNode != null) && (currNode.getVal().compareTo(item) <= 0) ) {
+
 				if(currNode.getVal().compareTo(item) == 0) {
 					contains = true;
 					break;
 				}
-				
+
 				currNode = currNode.getNext();
 			}
 		}
-		
+
 		return contains;
 	} // end of contains()
 
 
 	@Override
 	public void removeOne(String item) {
-		
+
 		// Check if the list is there or not
 		if(this.head != null) {
-			
+
 			ListNode currNode = head;
 			ListNode prevNode = head;
-			
-			// Iterate till end of the list is reached & current node value is less than provided item. List is ordered
-			while( (currNode != null) && (currNode.getVal().compareTo(item) < 0) ) {
-			
+
+			// Iterate till end of the list is reached & current node value is less than or equal to provided item. List is ordered
+			while( (currNode != null) && (currNode.getVal().compareTo(item) <= 0) ) {
+
 				// Element is found in the list
 				if(currNode.getVal().compareTo(item) == 0) {
-					
+
 					// set the previous element's next to current's element next. Set curr element to null to delete
 					prevNode.setNext(currNode.getNext());
 					currNode = null;
 					break;
 				}
-				
+
 				prevNode = currNode;
 				currNode = currNode.getNext();
 			}
 		}
-		
+
 	} // end of removeOne()
 
 
 	@Override
 	public String print() {
 		
+		// General implementation for testing purpose
+		StringBuilder ret_str = new StringBuilder();
+		ListNode curr = this.getHead();
+		
+		while(curr != null) {
+			ret_str.append(curr.getVal()+" ");
+		}
 		
 		
-		return new String();
+		return ret_str.toString();
 	} // end of OrderedPrint
 
 
@@ -178,7 +210,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 	public String printRange(String lower, String upper) {
 
 		StringBuilder retString = new StringBuilder();
-		
+
 		// Check if the list is there or not
 		if(this.head != null) {
 
@@ -188,7 +220,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 			while( (currNode != null) && (currNode.getVal().compareTo(upper) <= 0) ) {
 
 				// Element is found in the list
-				if( ( currNode.getVal().compareTo(lower) > 0 ) && (currNode.getVal().compareTo(upper) < 0)) {
+				if( ( currNode.getVal().compareTo(lower) >= 0 ) && (currNode.getVal().compareTo(upper) < 0)) {
 
 					// set the previous element's next to current's element next. Set curr element to null to delete
 					retString.append(currNode.getVal()+",");
@@ -206,42 +238,55 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 	public RmitMultiset union(RmitMultiset other) {
 
 		OrderedLinkedListMultiset retMultiset = new OrderedLinkedListMultiset();
-		
+
 		ListNode firstSetNode = this.head;
 		ListNode secSetNode = ((OrderedLinkedListMultiset) other).getHead();
-		
+
+		// Traverse through both multiset at the same time.
 		while(firstSetNode != null && secSetNode != null) {
-			
+
+			// Current pointer at firstList is pointing to smaller element than Current pointer at secondList
 			if(firstSetNode.getVal().compareTo(secSetNode.getVal()) < 0){
-				
+
+				// Collect the element from firstList. This is to maintain the order
 				retMultiset.add(firstSetNode.getVal());
 				firstSetNode = firstSetNode.getNext();
-				
+
 			}else if(firstSetNode.getVal().compareTo(secSetNode.getVal()) == 0){
-				
+
+				// Both pointers are pointing to elements having same values
+
+				// Collect both elements
 				retMultiset.add(firstSetNode.getVal());
+				retMultiset.add(secSetNode.getVal());
+
+				// Advance both cursors
 				firstSetNode = firstSetNode.getNext();
 				secSetNode = secSetNode.getNext();
+
 			}else {
-				
+
+				// Current pointer at secondList is pointing to smaller element than Current pointer at FirstList
+
+				// Collect element from secondList and advance the cursor. This is to make sure that we collect elements in ascending order
 				retMultiset.add(secSetNode.getVal());
 				secSetNode = secSetNode.getNext();
 			}
-			
+
 		}
-		
+
 		// We have reached at the end of the secondMultiset, but there are elements in firstList.
 		while(firstSetNode != null) {
 			retMultiset.add(firstSetNode.getVal());
 			firstSetNode = firstSetNode.getNext();
 		}
-		
+
 		// We have reached at the end of firstMultiset, but there are elements in secondList
 		while(secSetNode != null) {
 			retMultiset.add(secSetNode.getVal());
 			secSetNode = secSetNode.getNext();
 		}
-		
+
 		return (RmitMultiset) retMultiset;
 	} // end of union()
 
@@ -250,12 +295,14 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 	public RmitMultiset intersect(RmitMultiset other) {
 
 		OrderedLinkedListMultiset retMultiset = new OrderedLinkedListMultiset();
-		
+
 		ListNode firstSetNode = this.head;
 		ListNode secSetNode = ((OrderedLinkedListMultiset) other).getHead();
 
+		// Do this until we reach at any of the lists end
 		while(firstSetNode != null && secSetNode != null) {
 
+			// If we find common elements in both list, collect it.
 			if(firstSetNode.getVal().compareTo(secSetNode.getVal()) == 0){
 
 				retMultiset.add(firstSetNode.getVal());
@@ -263,15 +310,22 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 				secSetNode = secSetNode.getNext();
 			}
 			else if(firstSetNode.getVal().compareTo(secSetNode.getVal()) < 0){
-				
+
+				// This means that firstList cursor is pointing at smaller element that in secondList.
+				// This also means that both are not common
+				// Advance the firstList cursor
 				firstSetNode = firstSetNode.getNext();
 
 			}else {
-				
+
+				// This means that secondList cursor is pointing at smaller element that in firstList.
+				// This also means that both are not common
+				// Advance the secondList cursor
 				secSetNode = secSetNode.getNext();
 			}
 		}
-		
+
+
 		return (RmitMultiset) retMultiset;
 	} // end of intersect()
 
@@ -280,33 +334,46 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 	public RmitMultiset difference(RmitMultiset other) {
 
 		OrderedLinkedListMultiset retMultiset = new OrderedLinkedListMultiset();
-		
+
 		ListNode firstSetNode = this.head;
 		ListNode secSetNode = ((OrderedLinkedListMultiset) other).getHead();
 
+		
+		// Traverse both sets at the same time
 		while(firstSetNode != null && secSetNode != null) {
 
+			// Both values are same, so not part of the result set
 			if(firstSetNode.getVal().compareTo(secSetNode.getVal()) == 0){
 				firstSetNode = firstSetNode.getNext();
 				secSetNode = secSetNode.getNext();
 			}
 			else if(firstSetNode.getVal().compareTo(secSetNode.getVal()) < 0){
 
+				// firstSetNode value is smaller than secSetNode. Make it part of result as it is an element which is not part of the secSet
 				retMultiset.add(firstSetNode.getVal());
 				firstSetNode = firstSetNode.getNext();
 
 			}else {
+				
+				// secSetNode value is larger than firstSetNode val. Do nothing. Just advance the cursor.
 				secSetNode = secSetNode.getNext();
 			}
 		}
 		
+		
+		// 17-08-2020 - All remaining elements if any in the firstSet will be part of the results
+		while(firstSetNode != null) {
+			retMultiset.add(firstSetNode.getVal());
+			firstSetNode = firstSetNode.getNext();
+		}
+
 		return (RmitMultiset) retMultiset;
 	} // end of difference()
 
 
 
 	// Getter Setters Starts Here
-	
+
 	public ListNode getHead() {
 		return head;
 	}
@@ -315,7 +382,6 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 	public void setHead(ListNode head) {
 		this.head = head;
 	}
-
 
 	// Getter Setters Ends Here
 
