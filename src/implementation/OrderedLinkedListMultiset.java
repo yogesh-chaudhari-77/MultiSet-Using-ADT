@@ -193,16 +193,21 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 	@Override
 	public String print() {
 		
-		// General implementation for testing purpose
-		StringBuilder ret_str = new StringBuilder();
+		// Clone the multiset in Array implementation. This is required because, we need to print element based on it's onccurance count
+		ArrayMultiset multisetArr = new ArrayMultiset();
+
+		
 		ListNode curr = this.getHead();
 		
+		// Iterate over current list
 		while(curr != null) {
-			ret_str.append(curr.getVal()+" ");
+			
+			multisetArr.add(curr.getVal());
 		}
 		
+		// This method returns the string representation of the multiset sorted based on occurance count
+		return multisetArr.print();
 		
-		return ret_str.toString();
 	} // end of OrderedPrint
 
 
@@ -220,7 +225,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 			while( (currNode != null) && (currNode.getVal().compareTo(upper) <= 0) ) {
 
 				// Element is found in the list
-				if( ( currNode.getVal().compareTo(lower) >= 0 ) && (currNode.getVal().compareTo(upper) < 0)) {
+				if( ( currNode.getVal().compareTo(lower) >= 0 ) && (currNode.getVal().compareTo(upper) <= 0)) {
 
 					// set the previous element's next to current's element next. Set curr element to null to delete
 					retString.append(currNode.getVal()+",");

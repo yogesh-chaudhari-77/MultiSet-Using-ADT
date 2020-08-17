@@ -227,9 +227,10 @@ public class BstMultiset extends RmitMultiset
 		StringBuilder retStr = new StringBuilder();
 
 		TreeNode t = getSmallestElementFromTree(this.getRoot());
+		
 		while(t != null && t.getVal().compareTo(upper) <= 0) {
 
-			if(t.getVal().compareTo(lower) >= 0) {
+			if( ( t.getVal().compareTo(lower) >= 0 ) && (t.getVal().compareTo(upper) <= 0) ) {
 				retStr.append(t.getVal()+",");
 			}
 		}
