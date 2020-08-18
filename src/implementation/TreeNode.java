@@ -26,7 +26,15 @@ public class TreeNode{
 	}
 	
 	public TreeNode(String val) {
+
 		this.val = val;
+		
+		// New tree node is being created. So it must be 1
+		this.occuranceCount = 1;
+		
+		left = null;
+		right = null;
+		parent = null;
 	}
 
 	public String getVal() {
@@ -67,5 +75,16 @@ public class TreeNode{
 
 	public void setOccuranceCount(int occuranceCount) {
 		this.occuranceCount = occuranceCount;
+	}
+	
+	
+	// To be called after adding the node which is already present
+	public void OccuranceCountPlus1() {
+		this.setOccuranceCount( this.getOccuranceCount() + 1 );
+	}
+
+	// To be called after remove a node which is already present
+	public void OccuranceCountMinus1() {
+		this.setOccuranceCount( this.getOccuranceCount() - 1 );	
 	}
 }

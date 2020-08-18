@@ -14,7 +14,6 @@ import java.util.List;
 public class OrderedLinkedListMultiset extends RmitMultiset
 {
 
-	PrintStream outWriter = new PrintStream(System.out);
 	ListNode head;
 
 	public OrderedLinkedListMultiset() {
@@ -148,7 +147,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 	@Override
 	public int search(String item) {
 
-		int occuranceCount = 0;
+		int occuranceCount = -1;
 
 		// Check if the list is there or not
 		if(this.head != null) {
@@ -301,7 +300,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 				if( ( currNode.getVal().compareTo(lower) >= 0 ) && (currNode.getVal().compareTo(upper) <= 0)) {
 
 					// set the previous element's next to current's element next. Set curr element to null to delete
-					retString.append(currNode.getVal()+",");
+					retString.append(currNode.getVal()+":"+currNode.getOccuranceCount()+"\n");
 				}
 
 				currNode = currNode.getNext();
@@ -423,7 +422,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 				
 				// set one contains more occurance than set 2
 				if(firstSetNode.getOccuranceCount() > secSetNode.getOccuranceCount()) {
-					retMultiset.add(firstSetNode.getVal(), ( secSetNode.getOccuranceCount() - firstSetNode.getOccuranceCount() ));
+					retMultiset.add(firstSetNode.getVal(), ( firstSetNode.getOccuranceCount() - secSetNode.getOccuranceCount() ));
 				}
 				
 				firstSetNode = firstSetNode.getNext();

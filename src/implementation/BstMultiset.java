@@ -13,7 +13,6 @@ import java.util.Stack;
 public class BstMultiset extends RmitMultiset
 {
 
-
 	TreeNode root;
 
 	public TreeNode getRoot() {
@@ -33,8 +32,7 @@ public class BstMultiset extends RmitMultiset
 
 		// There is no tree. Create a new root node and assign the value
 		if(root == null) {
-			root = new TreeNode();
-			root.setVal(item);
+			root = new TreeNode(item);
 		}else {
 
 			// There is tree, figure out where to put it
@@ -43,6 +41,52 @@ public class BstMultiset extends RmitMultiset
 
 	} // end of add()
 
+	
+	public void add(String item, int occurance) {
+
+		// There is no tree. Create a new root node and assign the value
+		if(root == null) {
+			root = new TreeNode(item);
+			root.setOccuranceCount(occurance);
+		}else {
+
+			// There is tree, figure out where to put it
+			appendTreeNode(this.getRoot(), item, occurance);
+		}
+
+	} // end of add()
+	
+	
+	private void appendTreeNode(TreeNode node, String item, int occurance) {
+
+		if(item.compareTo( node.getVal() ) < 0) {
+			if( node.getLeft() == null ) {
+				TreeNode childNode = new TreeNode(item);
+				childNode.setOccuranceCount(occurance);
+				node.setLeft( childNode );
+				childNode.setParent( node );
+			}
+			else {
+				this.appendTreeNode(node.getLeft(), item, occurance);
+			}
+		}
+		else if( item.compareTo(node.getVal()) > 0) {
+			if ( node.getRight() == null ) {
+				TreeNode childNode = new TreeNode(item);
+				childNode.setOccuranceCount(occurance);
+				node.setRight(childNode);
+				childNode.setParent( node );
+			}
+			else {
+				this.appendTreeNode(node.getRight(), item, occurance);
+			}
+		}else if(item.compareTo(node.getVal()) == 0) {
+			
+			// Node with same value found. Update the occurance count only
+			node.setOccuranceCount( node.getOccuranceCount() + occurance );
+			
+		}
+	}
 
 	private void appendTreeNode(TreeNode node, String item) {
 
@@ -56,7 +100,7 @@ public class BstMultiset extends RmitMultiset
 				this.appendTreeNode(node.getLeft(), item);
 			}
 		}
-		else if( item.compareTo(node.getVal()) > 0 || item.compareTo(node.getVal()) == 0) {		// Need to discuss this condition
+		else if( item.compareTo(node.getVal()) > 0) {
 			if ( node.getRight() == null ) {
 				TreeNode childNode = new TreeNode(item);
 				node.setRight(childNode);
@@ -65,6 +109,11 @@ public class BstMultiset extends RmitMultiset
 			else {
 				this.appendTreeNode(node.getRight(), item);
 			}
+		}else if(item.compareTo(node.getVal()) == 0) {
+			
+			// Node with same value found. Update the occurance count only
+			node.setOccuranceCount( node.getOccuranceCount() + 1);
+			
 		}
 	}
 
@@ -74,7 +123,7 @@ public class BstMultiset extends RmitMultiset
 
 		// In order traversal gives elements in the sorted order
 		TreeNode t = this.getRoot();
-		int occuranceCount = 0;
+		int occuranceCount = -1;
 
 		// Navigate to that treeNode using power of BST
 		while(t != null) {
@@ -82,18 +131,10 @@ public class BstMultiset extends RmitMultiset
 				t = t.getRight();
 			}else if(t.getVal().compareTo(item) > 0) {
 				t = t.getLeft();
-			}else {
+			}else if(t.getVal().compareTo(item) == 0){
+				occuranceCount = t.getOccuranceCount();
 				break;
 			}
-		}
-
-		while(t != null && t.getVal().compareTo(item) <= 0) {
-
-			if(t.getVal().compareTo(item) == 0) {
-				occuranceCount += 1;
-			}
-
-			t = this.getInoderSucc(t);
 		}
 
 		return occuranceCount;
@@ -111,32 +152,15 @@ public class BstMultiset extends RmitMultiset
 			return retList;
 		}
 
-		int occuranceCount = 0;
 		Stack<TreeNode> poStack = new Stack<TreeNode>();
 		poStack.push(this.getRoot());
 
 		while(! poStack.empty() ) {
 
 			TreeNode currNode = poStack.pop();
-			String currNodeVal = currNode.getVal();
 
-			if(retList.size() == 0) {
+			if(currNode.getOccuranceCount() == instanceCount) {
 				retList.add(currNode.getVal());
-				occuranceCount += 1;
-			}else {
-
-				if( retList.get( retList.size() - 1).compareTo(currNodeVal) == 0) {
-					occuranceCount += 1;
-				}else if( retList.get( retList.size() - 1).compareTo(currNodeVal) < 0) {
-
-					if(occuranceCount != instanceCount) {
-						retList.remove( retList.size() - 1);
-					}
-
-					retList.add(currNodeVal);
-					occuranceCount = 1;
-				}
-
 			}
 
 			// If current tree node has right child, push that on stack
@@ -150,7 +174,7 @@ public class BstMultiset extends RmitMultiset
 
 		}
 
-		return null;
+		return retList;
 	} // end of searchByInstance    
 
 
@@ -191,23 +215,38 @@ public class BstMultiset extends RmitMultiset
 		// Element is leaf element
 		if(t.getLeft() == null && t.getRight() == null) {
 			
-			t = null;
+			t.OccuranceCountMinus1();
+			if(t.getOccuranceCount() == 0) {
+				t = null;
+			}
 			
 		}else if ( t.getLeft() != null && t.getRight() == null) {
 			
-			t.getParent().setLeft(t.getLeft());
-			t = null;
+			t.OccuranceCountMinus1();
+
+			if(t.getOccuranceCount() == 0) {
+				t.getParent().setLeft(t.getLeft());
+				t = null;
+			}
 			
 		}else if( t.getLeft() == null && t.getRight() != null ) {
 			
-			t.getParent().setRight(t.getLeft());
-			t = null;
+			t.OccuranceCountMinus1();
+			
+			if(t.getOccuranceCount() == 0) {
+				t.getParent().setRight(t.getLeft());
+				t = null;
+			}
 			
 		}else if (t.getLeft() != null && t.getRight() != null) {
 			
-			TreeNode inOrderSucc = getInoderSucc(t);
-			t.setVal( inOrderSucc.getVal() );
-			inOrderSucc = null;
+			t.OccuranceCountMinus1();
+			
+			if(t.getOccuranceCount() == 0) {
+				TreeNode inOrderSucc = getInoderSucc(t);
+				t.setVal( inOrderSucc.getVal() );
+				inOrderSucc = null;
+			}
 		}
 
 	} // end of removeOne()
@@ -216,8 +255,23 @@ public class BstMultiset extends RmitMultiset
 	@Override
 	public String print() {
 
-		// Placeholder, please update.
-		return new String();
+		// Clone the multiset in Array implementation. This is required because, we need to print element based on it's onccurance count
+		ArrayMultiset multisetArr = new ArrayMultiset();
+
+		TreeNode curr = this.getSmallestElementFromTree( this.getRoot() );
+		
+		// Iterate over current list
+		while(curr != null) {
+			
+			for (int i = 0; i < curr.getOccuranceCount(); i++) {
+				multisetArr.add(curr.getVal());
+			}
+			
+			curr = this.getInoderSucc(curr);
+		}
+		
+		// This method returns the string representation of the multiset sorted based on occurance count
+		return multisetArr.print();
 	} // end of OrderedPrint
 
 
@@ -231,8 +285,10 @@ public class BstMultiset extends RmitMultiset
 		while(t != null && t.getVal().compareTo(upper) <= 0) {
 
 			if( ( t.getVal().compareTo(lower) >= 0 ) && (t.getVal().compareTo(upper) <= 0) ) {
-				retStr.append(t.getVal()+",");
+				retStr.append(t.getVal()+":"+t.getOccuranceCount()+"\n");
 			}
+			
+			t = this.getInoderSucc(t);
 		}
 
 		return retStr.toString();
@@ -253,13 +309,17 @@ public class BstMultiset extends RmitMultiset
 		while(firstTreePtr != null && secTreePtr != null) {
 
 			if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) < 0) {
-				retSet.add( firstTreePtr.getVal() );
+				
+				retSet.add( firstTreePtr.getVal(), firstTreePtr.getOccuranceCount() );
 				firstTreePtr = getInoderSucc(firstTreePtr);
+				
 			}else if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) > 0) {
-				retSet.add( secTreePtr.getVal() );
+				retSet.add( secTreePtr.getVal(), secTreePtr.getOccuranceCount() );
 				secTreePtr = getInoderSucc(secTreePtr);
+				
 			}else if(firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) == 0) {
-				retSet.add( firstTreePtr.getVal() );
+				
+				retSet.add( firstTreePtr.getVal(), (firstTreePtr.getOccuranceCount() + secTreePtr.getOccuranceCount() ));
 				firstTreePtr = getInoderSucc(firstTreePtr);
 				secTreePtr = getInoderSucc(secTreePtr);
 			}
@@ -267,13 +327,13 @@ public class BstMultiset extends RmitMultiset
 
 		// Exhausted second tree but first tree has elements
 		while(firstTreePtr != null) {
-			retSet.add(firstTreePtr.getVal());
+			retSet.add(firstTreePtr.getVal(), firstTreePtr.getOccuranceCount());
 			firstTreePtr = getInoderSucc(firstTreePtr);
 		}
 
 		// Exhausted first free tree but second tree has elements
 		while(secTreePtr != null) {
-			retSet.add(secTreePtr.getVal());
+			retSet.add( secTreePtr.getVal(), secTreePtr.getOccuranceCount() );
 			secTreePtr = getInoderSucc(secTreePtr);
 		}
 
@@ -301,7 +361,7 @@ public class BstMultiset extends RmitMultiset
 				
 			}else if(firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) == 0) {
 				
-				retSet.add( firstTreePtr.getVal() );
+				retSet.add( firstTreePtr.getVal(), Math.min(firstTreePtr.getOccuranceCount(), secTreePtr.getOccuranceCount() ));
 				firstTreePtr = getInoderSucc(firstTreePtr);
 				secTreePtr = getInoderSucc(secTreePtr);
 			}
@@ -323,7 +383,7 @@ public class BstMultiset extends RmitMultiset
 		while(firstTreePtr != null && secTreePtr != null) {
 
 			if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) < 0) {
-				retSet.add( firstTreePtr.getVal() );
+				retSet.add( firstTreePtr.getVal(), firstTreePtr.getOccuranceCount() );
 				firstTreePtr = getInoderSucc(firstTreePtr);
 				
 			}else if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) > 0) {
@@ -331,9 +391,21 @@ public class BstMultiset extends RmitMultiset
 				
 			}else if(firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) == 0) {
 				
+				// set one contains more occurance than set 2
+				if(firstTreePtr.getOccuranceCount() > secTreePtr.getOccuranceCount()) {
+					
+					retSet.add(firstTreePtr.getVal(), (firstTreePtr.getOccuranceCount() - secTreePtr.getOccuranceCount()));
+				}
+				
 				firstTreePtr = getInoderSucc(firstTreePtr);
 				secTreePtr = getInoderSucc(secTreePtr);
 			}
+		}
+		
+		// 18-08-2020 - All remaining elements if any in the firstSet will be part of the results
+		while(firstTreePtr != null) {
+			retSet.add(firstTreePtr.getVal(), firstTreePtr.getOccuranceCount());
+			firstTreePtr = getInoderSucc(firstTreePtr);
 		}
 
 		return retSet;
