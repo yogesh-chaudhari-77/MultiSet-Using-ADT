@@ -321,24 +321,20 @@ public class DualLinkedListMultiset extends RmitMultiset
 
     @Override
 	public String print() {
-    	
-    	ListNode printNode = this.list2Head;
-    	String printString = new String();
+        String printString = new String();
 
-    	if (list2Head.getNext() != null)
-    	{
-    		printNode = reverseOrder();
-    		while(printNode != null)
-    		{
-    			printString = printString + printNode.getVal() + ": " + printNode.getOccuranceCount() + "\n";
-    			printNode = printNode.getNext();
-    		}
-    	}
-    	else
-    		printString = printString + printNode.getVal() + ": " + printNode.getOccuranceCount() + "\n";
-    	
+        printString = printReverse (this.list2Head);
+    	 
         return printString;
-    } // end of OrderedPrint
+    }
+    
+    public String printReverse(ListNode head) 
+    { 
+    	if (head == null) 
+        	return ""; 
+  
+    	return printReverse(head.getNext())+ head.getVal() + ": " + head.getOccuranceCount() + "\n";
+    } 
 
 
     @Override
@@ -506,30 +502,13 @@ public class DualLinkedListMultiset extends RmitMultiset
         return newMultiset;
     } // end of difference()
 
-    
-    
-//    public ListNode copyList(ListNode list1){
-//        if (list1 == null)
-//            return null;
-//
-//        ListNode copyList = new ListNode(list1.getVal(),list1.getOccuranceCount());
-//        ListNode tempList = copyList;
-//        ListNode currNode = list1;
-//
-//        while (currNode.getNext() != null){
-//        	currNode = currNode.getNext();
-//        	tempList.setNext(new ListNode(currNode.getVal(),currNode.getOccuranceCount()));
-//        	tempList = tempList.getNext();
-//        }
-//
-//        return copyList;
-//    }
-    
+
     public ListNode getHead1()
     {
     	return this.list1Head;
     }
-    
+
+
     public ListNode getHead2()
     {
     	return this.list2Head;
@@ -678,49 +657,5 @@ public class DualLinkedListMultiset extends RmitMultiset
     	System.out.println("List length : " + this.listLength);
     	// Implement me!
     } // end of add()
-    
-    
-    public ListNode reverseOrder ()
-    {
-    	boolean elementAdded = false;
-    	ListNode reverseList2 = list2Head;
-    	if( reverseList2 == null)
-    	{
-    				ListNode prevNode = reverseList2;
-    				ListNode currNode = reverseList2;
-    				ListNode nextNode = reverseList2.getNext();
-
-    				while(currNode != null )
-    				{
-    					if (currNode.getOccuranceCount() < nextNode.getOccuranceCount())
-    					{
-    						if (prevNode.equals(reverseList2))
-    						{
-    							reverseList2.setNext(nextNode);
-    							nextNode.setNext(currNode);
-        						
-    						}
-    						else
-    						{
-    							prevNode.setNext(nextNode);
-    							nextNode.setNext(currNode);
-    						}
-    						elementAdded = true;
-    					}
-    					else
-    					{
-    						prevNode = currNode;
-    						currNode = currNode.getNext();
-    						nextNode = nextNode.getNext();
-    					}
-    				}
-    				//Inserting at the end of the list.
-    				if (!elementAdded)
-    				{
-    					prevNode.setNext(nextNode);
-    				}
-    	}
-    	return reverseList2;
-	}
 
 } // end of class DualLinkedListMultiset
