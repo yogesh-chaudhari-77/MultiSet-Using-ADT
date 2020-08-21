@@ -1,5 +1,6 @@
 package implementation;
 
+
 public class ListNode{
 
 	// Stores the actual node value
@@ -27,6 +28,17 @@ public class ListNode{
 		
 		this.next = null;
 	}
+
+	
+	public ListNode(String val, int occuranceCount) {
+		this.val = val;
+		
+		// Creating new node so the default occurance will be 1 only;
+		this.occuranceCount = occuranceCount;
+		
+		this.next = null;
+	}
+	
 
 	
 	public String getVal() {
@@ -60,12 +72,12 @@ public class ListNode{
 	
 	
 	// To be called after adding the node which is already present
-	public void OccuranceCountPlus1() {
+	public void incrementOccurenceCount() {
 		this.setOccuranceCount( this.getOccuranceCount() + 1 );
 	}
 
 	// To be called after remove a node which is already present
-	public void OccuranceCountMinus1() {
+	public void decrementOccurenceCount() {
 		this.setOccuranceCount( this.getOccuranceCount() - 1 );	
 	}
 }
