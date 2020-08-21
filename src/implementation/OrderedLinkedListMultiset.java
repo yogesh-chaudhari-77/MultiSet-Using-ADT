@@ -297,7 +297,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 			while( (currNode != null) && (currNode.getVal().compareTo(upper) <= 0) ) {
 
 				// Element is found in the list
-				if( ( currNode.getVal().compareTo(lower) >= 0 ) && (currNode.getVal().compareTo(upper) <= 0)) {
+				if( ( currNode.getVal().compareTo(lower) >= 0 ) && (currNode.getVal().compareTo(upper) <= 0) ) {
 
 					// set the previous element's next to current's element next. Set curr element to null to delete
 					retString.append(currNode.getVal()+":"+currNode.getOccuranceCount()+"\n");
