@@ -10,8 +10,8 @@ public class DataGenerator {
 	private Random randomUtil = new Random();
 
 	private static final int smallDatasetSize = 100;
-	private static final int mediumDatasetSize = 5000;
-	private static final int largeDatasetSize = 100000;
+	private static final int mediumDatasetSize = 1500;
+	private static final int largeDatasetSize = 10000;
 
 	String [] alphabetSet = { "a", "b", "c", "d", "e", "f", "g",
 			"h", "i", "j", "k", "l", "m", "n",
@@ -88,20 +88,45 @@ public class DataGenerator {
 	 *  
 	 */
 
-	//	{
-	//		// Create a multiset before performing operation.
-	//		ArrayMultiset smallRandomMultiset = new ArrayMultiset();
-	//
-	//		for(String element : this.smallDataset) {
-	//			smallRandomMultiset.add(element);
-	//		}
-	//
-	//
-	//		String firstElement = smallRandomMultiset[0].getVal
-	//		smallRandomMultiset.add(elem);
-	//	}
+	public void testArraySetAdd(ArrayMultiset arrayMultiset)
+	{	
+		// Testing best case - Adding duplicate element. First one.
+		// Expecting no shifts
+		String firstElement = arrayMultiset.getArray()[0].getElement();
+		arrayMultiset.add(firstElement);
+		
+		// Worst case 1 - Element is not present in the list
+		String uniqueElement = "YogeshShriramNotPresentInSet";
+		arrayMultiset.add(uniqueElement);
+		
+		// Worst cases - In between elements
+		// Random cases. Elements could be added in between
+		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
+		for (int i = 0; i < 5; i++) {
+			arrayMultiset.add( randomStrs[i] );
+		}
+	}
 
 
+	public void testArraySetRemove(ArrayMultiset arrayMultiset) {
+
+		// Testing worst case - Element to be removed is first element with 1 occurance only. Expecting entire arrayShift
+		String firstElement = arrayMultiset.getArray()[0].getElement();
+		arrayMultiset.removeOne(firstElement);
+
+		// Testing worst case - Largest element to be deleted but not in the list
+		// Entire list to be traversed
+		String largestElement = "YogeshSriramNotInTheList";
+		arrayMultiset.removeOne(largestElement);
+
+		
+		// Average case - In between elements
+		// Random cases. Elements could be any where in the list
+		for (int i = 0; i < 5; i++) {
+			arrayMultiset.removeOne( this.smallDataset.get( this.randomUtil.nextInt( smallDatasetSize - 10 ) ) );
+		}
+	}
+	
 	/*
 	 *  DataStructure : OrderedList
 	 *  Dataset : Small
@@ -130,10 +155,6 @@ public class DataGenerator {
 		String uniqueElement = "YogeshShriram";
 		smallOrderedList.add(uniqueElement);
 
-		// Adding random element
-		String alreadyPresentElement = this.smallDataset.get( this.smallDataset.size() / 2 );
-		smallOrderedList.add(alreadyPresentElement);
-		
 		// Average case - In between elements
 		// Random cases. Elements could be added in between
 		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
@@ -178,11 +199,7 @@ public class DataGenerator {
 		String uniqueElement = "YogeshShriram";
 		mediumOrderedList.add(uniqueElement);
 
-		// Average case - Adding random element which is already present in the list
-		// Some list traversal is required. Average case
-		String alreadyPresentElement = this.mediumDataset.get((this.mediumDataset.size() / 2));
-		mediumOrderedList.add(alreadyPresentElement);
-		
+
 		// Average case - In between elements
 		// Random cases. Elements could be added in between
 		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
@@ -190,7 +207,7 @@ public class DataGenerator {
 			mediumOrderedList.add( randomStrs[i] );
 		}
 		
-		System.out.println(mediumOrderedList.print());
+		//System.out.println(mediumOrderedList.print());
 	}
 	
 
@@ -233,7 +250,7 @@ public class DataGenerator {
 			largeOrderedList.add( randomStrs[i] );
 		}
 		
-		System.out.println(largeOrderedList.print());
+		//System.out.println(largeOrderedList.print());
 	}
 	
 	
@@ -266,9 +283,8 @@ public class DataGenerator {
 		
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the list
-		int [] randomIndexes = { 3, 20, 40, 60, 90 };
 		for (int i = 0; i < 5; i++) {
-			smallOrderedList.removeOne( this.sortedSmallDataset.get(randomIndexes[i]) );
+			smallOrderedList.removeOne( this.sortedSmallDataset.get( this.randomUtil.nextInt( smallDatasetSize - 10 ) ) );
 		}
 	}
 
@@ -302,9 +318,8 @@ public class DataGenerator {
 
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the list
-		int [] randomIndexes = { 10, 1000, 2000, 3000, 4777};
 		for (int i = 0; i < 5; i++) {
-			mediumOrderedList.removeOne( this.sortedMediumDataset.get(randomIndexes[i]) );
+			mediumOrderedList.removeOne( this.sortedMediumDataset.get( this.randomUtil.nextInt( mediumDatasetSize - 100 ) ) );
 		}
 	}
 	
@@ -338,9 +353,8 @@ public class DataGenerator {
 
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the list
-		int [] randomIndexes = { 10, 10000, 25000, 50000, 75000, 90000};
 		for (int i = 0; i < 6; i++) {
-			largeOrderedList.removeOne( this.sortedLargeDataset.get(randomIndexes[i]) );
+			largeOrderedList.removeOne( this.sortedLargeDataset.get( this.randomUtil.nextInt( largeDatasetSize - 100 ) ) );
 		}
 	}
 	
@@ -355,7 +369,7 @@ public class DataGenerator {
 	{
 
 		// Create a multiset before performing the operation
-		BstMultiset smallBSTSet = new BstMultiset ();
+		BstMultiset smallBSTSet = new BstMultiset();
 
 		for(String element : this.smallDataset) {
 			smallBSTSet.add(element);
@@ -491,18 +505,12 @@ public class DataGenerator {
 		// Testing best case - Element to be removed is equal to the root element
 		String firstElement = firstBSTSet.getRoot().getVal();
 		firstBSTSet.removeOne(firstElement);
-
-		// Testing worst case - Largest element to be deleted but not in the list
-		// Entire right sub tree to be traversed
-		String largestElement = "YogeshSriramNotInList";
-		firstBSTSet.removeOne(largestElement);
 	
 		
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the list
-		int [] randomIndexes = { 3, 20, 40, 60, 90 };
 		for (int i = 0; i < 5; i++) {
-			firstBSTSet.removeOne( this.sortedSmallDataset.get(randomIndexes[i]) );
+			firstBSTSet.removeOne( this.sortedSmallDataset.get( this.randomUtil.nextInt( smallDatasetSize - 10 ) ) );
 		}
 	}
 
@@ -529,16 +537,10 @@ public class DataGenerator {
 		String firstElement = multiset.getRoot().getVal();
 		multiset.removeOne(firstElement);
 
-		// Testing worst case - Largest element to be deleted but not in the list
-		// Entire right sub tree need to be traverserved
-		String uniqueElement = "YogeshShriramNotInTheList";
-		multiset.removeOne(uniqueElement);
-
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the list
-		int [] randomIndexes = { 10, 1000, 2000, 3000, 4777};
 		for (int i = 0; i < 5; i++) {
-			multiset.removeOne( this.sortedMediumDataset.get(randomIndexes[i]) );
+			multiset.removeOne( this.sortedMediumDataset.get( this.randomUtil.nextInt( mediumDatasetSize - 100 ) ) );
 		}
 	}
 	
@@ -565,17 +567,10 @@ public class DataGenerator {
 		multiset.removeOne(firstElement);
 
 		
-		// Element to be deleted is largest element and not present in the tree
-		// Entire right subtree needs to be traversed though
-		String uniqueElement = "YogeshShriramNotInTheList";
-		multiset.removeOne(uniqueElement);
-
-
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the list
-		int [] randomIndexes = { 10, 10000, 25000, 50000, 75000, 90000};
 		for (int i = 0; i < 6; i++) {
-			multiset.removeOne( this.sortedLargeDataset.get(randomIndexes[i]) );
+			multiset.removeOne( this.sortedLargeDataset.get( this.randomUtil.nextInt( largeDatasetSize - 100 ) ) );
 		}
 	}
 	
@@ -1089,9 +1084,8 @@ public class DataGenerator {
 		
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the list
-		int [] randomIndexes = { 3, 20, 40, 60, 90 };
 		for (int i = 0; i < 5; i++) {
-			dualList.removeOne( this.sortedSmallDataset.get(randomIndexes[i]) );
+			dualList.removeOne( this.sortedSmallDataset.get(  this.randomUtil.nextInt( smallDatasetSize - 10 ) ) );
 		}
 	}
 
@@ -1125,9 +1119,8 @@ public class DataGenerator {
 
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the list
-		int [] randomIndexes = { 10, 1000, 2000, 3000, 4777};
 		for (int i = 0; i < 5; i++) {
-			dualList.removeOne( this.sortedMediumDataset.get(randomIndexes[i]) );
+			dualList.removeOne( this.sortedMediumDataset.get( this.randomUtil.nextInt( mediumDatasetSize - 100 ) ) );
 		}
 	}
 	
@@ -1161,9 +1154,8 @@ public class DataGenerator {
 
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the list
-		int [] randomIndexes = { 10, 10000, 25000, 50000, 75000, 90000};
 		for (int i = 0; i < 6; i++) {
-			dualList.removeOne( this.sortedLargeDataset.get(randomIndexes[i]) );
+			dualList.removeOne( this.sortedLargeDataset.get(this.randomUtil.nextInt( largeDatasetSize - 100 ) ) );
 		}
 	}
 	
@@ -1439,9 +1431,69 @@ public class DataGenerator {
 		
 		
 		// Testing Dual Ordered List - Intersect
+		dg.testDualOrderedListIntersectWithSmallDatadaset();
+		dg.testDualOrderedListIntersectWithMediumDatadaset();
+		dg.testDualOrderedListIntersectWithLargeDatadaset();
 		
 		
 		// Testing Dual Ordered List Print()
+		dg.testDualOrderedListPrintWithSmallDatadaset();
+		dg.testDualOrderedListPrintWithMediumDatadaset();
+		dg.testDualOrderedListPrintWithLargeDatadaset();
+		
+		
+		// Testing ArrayMultiset Add Operations
+		
+		// Small Dataset
+		ArrayMultiset arrayMultiset = new ArrayMultiset();
+		for(String str : dg.smallDataset) {
+			arrayMultiset.add(str);
+		}
+		
+		dg.testArraySetAdd(arrayMultiset);
+
+		// Medium Dataset
+		arrayMultiset = new ArrayMultiset();
+		for(String str : dg.mediumDataset) {
+			arrayMultiset.add(str);
+		}
+
+		dg.testArraySetAdd(arrayMultiset);
+		
+		// Large Dataset
+		arrayMultiset = new ArrayMultiset();
+		for(String str : dg.largeDataset) {
+			arrayMultiset.add(str);
+		}
+		
+		dg.testArraySetAdd(arrayMultiset);
+		
+
+		// Testing ArrayMultiset Remove Operation
+		
+		// Small dataset
+		arrayMultiset = new ArrayMultiset();
+		for(String str : dg.smallDataset) {
+			arrayMultiset.add(str);
+		}
+		dg.testArraySetRemove(arrayMultiset);
+		
+		
+		// Medium Dataset
+		arrayMultiset = new ArrayMultiset();
+		for(String str : dg.mediumDataset) {
+			arrayMultiset.add(str);
+		}
+		dg.testArraySetRemove(arrayMultiset);
+		
+		
+		// Large Dataset
+		arrayMultiset = new ArrayMultiset();
+		for(String str : dg.largeDataset) {
+			arrayMultiset.add(str);
+		}
+		dg.testArraySetRemove(arrayMultiset);
+		
 		
 		long endTime = System.nanoTime();
 		long durationInNano = (endTime - startTime);  //Total execution time in nano seconds
@@ -1458,5 +1510,3 @@ public class DataGenerator {
 	}
 	
 }
-
-

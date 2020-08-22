@@ -14,7 +14,6 @@ public class ArrayMultiset extends RmitMultiset
 {
 	private ArrayObject[] array;
 	
-	
 	//Constructor creates an empty array
 	public ArrayMultiset()
 	{
@@ -438,6 +437,17 @@ public class ArrayMultiset extends RmitMultiset
     		}
     		
     	}// end of add()
+
+
+	public ArrayObject[] getArray() {
+		return array;
+	}
+
+
+	public void setArray(ArrayObject[] array) {
+		this.array = array;
+	}
+    
 } // end of class ArrayMultiset
 
 

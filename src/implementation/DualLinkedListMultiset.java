@@ -94,7 +94,7 @@ public class DualLinkedListMultiset extends RmitMultiset
         	        	this.listLength++;
         			}
         		}
-//        	System.out.println("Checkpoint 1");
+//        	//System.out.println("Checkpoint 1");
         	}
 
         	//Adding an element to the list2 and maintaining order based on Instance Count
@@ -154,22 +154,22 @@ public class DualLinkedListMultiset extends RmitMultiset
         }	
     	
     	ListNode printNode = list1Head;
-    	System.out.println("List 1 based on Element order");
+    	//System.out.println("List 1 based on Element order");
     	while(printNode != null)
     	{
-    		System.out.println ("Node Value: " + printNode.getVal() + "       Instance Count: " + printNode.getOccuranceCount());
+    		////System.out.println ("Node Value: " + printNode.getVal() + "       Instance Count: " + printNode.getOccuranceCount());
     		printNode = printNode.getNext();
     	}
     	
     	ListNode printNode2 = list2Head;
-    	System.out.println("List 2 based on Instance count order");
+    	// //System.out.println("List 2 based on Instance count order");
     	while(printNode2 != null)
     	{
-    		System.out.println ("Node Value: " + printNode2.getVal() + "       Instance Count: " + printNode2.getOccuranceCount());
+    		////System.out.println ("Node Value: " + printNode2.getVal() + "       Instance Count: " + printNode2.getOccuranceCount());
     		printNode2 = printNode2.getNext();
     	}
-    	System.out.println("List length : " + this.listLength);
-    	// Implement me!
+    	//System.out.println("List length : " + this.listLength);
+
     } // end of add()
 
 
@@ -641,21 +641,21 @@ public class DualLinkedListMultiset extends RmitMultiset
         }	
     	
     	ListNode printNode = list1Head;
-    	System.out.println("List 1 based on Element order");
+    	//System.out.println("List 1 based on Element order");
     	while(printNode != null)
     	{
-    		System.out.println ("Node Value: " + printNode.getVal() + "       Instance Count: " + printNode.getOccuranceCount());
+    		//System.out.println ("Node Value: " + printNode.getVal() + "       Instance Count: " + printNode.getOccuranceCount());
     		printNode = printNode.getNext();
     	}
     	
     	ListNode printNode2 = list2Head;
-    	System.out.println("List 2 based on Instance count order");
+    	//System.out.println("List 2 based on Instance count order");
     	while(printNode2 != null)
     	{
-    		System.out.println ("Node Value: " + printNode2.getVal() + "       Instance Count: " + printNode2.getOccuranceCount());
+    		//System.out.println ("Node Value: " + printNode2.getVal() + "       Instance Count: " + printNode2.getOccuranceCount());
     		printNode2 = printNode2.getNext();
     	}
-    	System.out.println("List length : " + this.listLength);
+    	//System.out.println("List length : " + this.listLength);
     	// Implement me!
     } // end of add()
 
