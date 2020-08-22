@@ -215,9 +215,13 @@ public class BstMultiset extends RmitMultiset
 		// Element is leaf element
 		if(t.getLeft() == null && t.getRight() == null) {
 			
-			t.OccuranceCountMinus1();
-			if(t.getOccuranceCount() == 0) {
-				t = null;
+			if(t.getVal().compareTo(item) == 0) {
+				t.OccuranceCountMinus1();
+				if(t.getOccuranceCount() == 0) {
+					t = null;
+				}
+			}else {
+				System.out.println("BSTTree : No such element exist in the multiset");
 			}
 			
 		}else if ( t.getLeft() != null && t.getRight() == null) {

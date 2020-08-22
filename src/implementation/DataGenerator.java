@@ -85,7 +85,7 @@ public class DataGenerator {
 	 *  DataStructure : ArrayMultliset
 	 *  Dataset : Small
 	 *  Distribution : Random
-	 *  
+	 *  Operation : Add
 	 */
 
 	public void testArraySetAdd(ArrayMultiset arrayMultiset)
@@ -108,7 +108,13 @@ public class DataGenerator {
 	}
 
 
-	public void testArraySetRemove(ArrayMultiset arrayMultiset) {
+	/*
+	 *  DataStructure : ArrayMultliset
+	 *  Dataset : Small
+	 *  Distribution : Random
+	 *  Operation : Remove 
+	 */
+	public void testArraySetRemove(ArrayMultiset arrayMultiset, ArrayList<String> dataset, int dataSetSize) {
 
 		// Testing worst case - Element to be removed is first element with 1 occurance only. Expecting entire arrayShift
 		String firstElement = arrayMultiset.getArray()[0].getElement();
@@ -120,12 +126,37 @@ public class DataGenerator {
 		arrayMultiset.removeOne(largestElement);
 
 		
-		// Average case - In between elements
+		// Worst / Average case - In between elements
 		// Random cases. Elements could be any where in the list
 		for (int i = 0; i < 5; i++) {
-			arrayMultiset.removeOne( this.smallDataset.get( this.randomUtil.nextInt( smallDatasetSize - 10 ) ) );
+			arrayMultiset.removeOne( dataset.get( this.randomUtil.nextInt( dataSetSize - 10 ) ) );
 		}
 	}
+	
+	
+	/*
+	 *  DataStructure : ArrayMultliset
+	 *  Dataset : Small
+	 *  Distribution : Random
+	 *  Operation : Print
+	 */
+	public void testArraySetPrint(ArrayMultiset arrayMultiset) {
+		arrayMultiset.print();
+	}
+	
+	
+	/*
+	 *  DataStructure : ArrayMultliset
+	 *  Dataset : Small
+	 *  Distribution : Random
+	 *  Operation : Print
+	 */
+	public void testArraySetIntersect(ArrayMultiset first, ArrayMultiset second) {
+		
+		first.intersect(second);
+		
+	}
+	
 	
 	/*
 	 *  DataStructure : OrderedList
@@ -1442,7 +1473,7 @@ public class DataGenerator {
 		dg.testDualOrderedListPrintWithLargeDatadaset();
 		
 		
-		// Testing ArrayMultiset Add Operations
+		// Testing ArrayMultiset 
 		
 		// Small Dataset
 		ArrayMultiset arrayMultiset = new ArrayMultiset();
@@ -1451,6 +1482,16 @@ public class DataGenerator {
 		}
 		
 		dg.testArraySetAdd(arrayMultiset);
+		
+		// Testing best case - Unique Elements with occurance 1 - Can be terminiated with N comparisons
+		dg.testArraySetPrint(arrayMultiset);
+		
+		// Testing worst case - Random elements with random occurances
+		for(int i = 0; i<50; i++) {
+			arrayMultiset.add( dg.smallDataset.get( dg.randomUtil.nextInt( smallDatasetSize - 1) ) );
+		}
+		dg.testArraySetPrint(arrayMultiset);
+		
 
 		// Medium Dataset
 		arrayMultiset = new ArrayMultiset();
@@ -1459,6 +1500,18 @@ public class DataGenerator {
 		}
 
 		dg.testArraySetAdd(arrayMultiset);
+
+		
+		// Testing best case - Unique Elements with occurance 1 - Can be terminiated with N comparisons
+		dg.testArraySetPrint(arrayMultiset);
+		
+		
+		// Testing worst case - Random elements with random occurances
+		for(int i = 0; i<500; i++) {
+			arrayMultiset.add( dg.mediumDataset.get( dg.randomUtil.nextInt( mediumDatasetSize - 1) ) );
+		}
+		dg.testArraySetPrint(arrayMultiset);
+		
 		
 		// Large Dataset
 		arrayMultiset = new ArrayMultiset();
@@ -1468,6 +1521,16 @@ public class DataGenerator {
 		
 		dg.testArraySetAdd(arrayMultiset);
 		
+		// Testing best case - Unique Elements with occurance 1 - Can be terminiated with N comparisons
+		dg.testArraySetPrint(arrayMultiset);
+
+
+		// Testing worst case - Random elements with random occurances
+		for(int i = 0; i<largeDatasetSize/2; i++) {
+			arrayMultiset.add( dg.largeDataset.get( dg.randomUtil.nextInt( largeDatasetSize - 1) ) );
+		}
+		dg.testArraySetPrint(arrayMultiset);
+
 
 		// Testing ArrayMultiset Remove Operation
 		
@@ -1476,7 +1539,8 @@ public class DataGenerator {
 		for(String str : dg.smallDataset) {
 			arrayMultiset.add(str);
 		}
-		dg.testArraySetRemove(arrayMultiset);
+		
+		dg.testArraySetRemove(arrayMultiset, dg.smallDataset, smallDatasetSize);
 		
 		
 		// Medium Dataset
@@ -1484,7 +1548,7 @@ public class DataGenerator {
 		for(String str : dg.mediumDataset) {
 			arrayMultiset.add(str);
 		}
-		dg.testArraySetRemove(arrayMultiset);
+		dg.testArraySetRemove(arrayMultiset, dg.mediumDataset, mediumDatasetSize);
 		
 		
 		// Large Dataset
@@ -1492,7 +1556,30 @@ public class DataGenerator {
 		for(String str : dg.largeDataset) {
 			arrayMultiset.add(str);
 		}
-		dg.testArraySetRemove(arrayMultiset);
+		dg.testArraySetRemove(arrayMultiset, dg.largeDataset, largeDatasetSize);
+
+
+		
+		// Interect operations
+		ArrayMultiset firstArrayMultiset = new ArrayMultiset();
+		ArrayMultiset secondArrayMultiset = new ArrayMultiset();
+		
+		for(String element : dg.smallDataset) {
+			firstArrayMultiset.add(element);
+			secondArrayMultiset.add(element);
+		}
+		
+		firstArrayMultiset.intersect(secondArrayMultiset);
+		
+		
+		// No or few common elements
+		secondArrayMultiset = new ArrayMultiset();
+		for(int a = 0; a < smallDatasetSize; a++) {
+			secondArrayMultiset.add( dg.getDataElement() );
+		}
+		
+		
+		firstArrayMultiset.intersect(secondArrayMultiset);	
 		
 		
 		long endTime = System.nanoTime();
