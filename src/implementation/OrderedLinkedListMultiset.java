@@ -52,7 +52,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 				if(curr.getVal().compareTo(item) == 0) {
 					
 					// If present, just increament it's occurance count
-					curr.OccuranceCountPlus1();
+					curr.incrementOccurenceCount();
 					return;
 				}
 				else if(item.compareTo(curr.getVal()) < 0) {
@@ -238,7 +238,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 				// Element is found in the list
 				if(currNode.getVal().compareTo(item) == 0) {
 					
-					currNode.OccuranceCountMinus1();
+					currNode.decrementOccurenceCount();
 				
 					// If the occurance count is 0 then we need to delete that node as well;
 					if (currNode.getOccuranceCount() == 0) {

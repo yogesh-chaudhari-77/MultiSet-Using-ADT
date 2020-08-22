@@ -16,7 +16,7 @@ public class DataGenerator {
 	String [] alphabetSet = { "a", "b", "c", "d", "e", "f", "g",
 			"h", "i", "j", "k", "l", "m", "n",
 			"o", "p", "q", "r", "s", "t", "u",
-			"v", "w", "x", "y", "z"};
+			"v", "w", "x", "y", "z" };
 
 	ArrayList<String> smallDataset = new ArrayList<String>();
 	ArrayList<String> mediumDataset = new ArrayList<String>();
@@ -138,10 +138,11 @@ public class DataGenerator {
 		// Random cases. Elements could be added in between
 		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
 		for (int i = 0; i < 5; i++) {
+			
 			smallOrderedList.add( randomStrs[i] );
 		}
 		
-		System.out.println(smallOrderedList.print());
+		//System.out.println(smallOrderedList.print());
 	}
 
 
@@ -486,8 +487,9 @@ public class DataGenerator {
 		}
 
 		smallOrderedList.print();
+		
+		// Add duplicate data to achieve higher complexity
 	}
-	
 	
 	/*
 	 *  DataStructure : Ordered Linked List
@@ -617,6 +619,9 @@ public class DataGenerator {
 		dg.testTreeSetWithSmallDatadaset();
 		dg.testTreeSetWithMediumDatadaset();
 		dg.testTreeSetWithLargeDatadaset();
+		
+		
+		// Testing BST implementation for the - intersection
 
 		long endTime = System.nanoTime();
 		long durationInNano = (endTime - startTime);  //Total execution time in nano seconds
