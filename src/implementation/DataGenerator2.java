@@ -12,21 +12,25 @@ public class DataGenerator2 {
 
 	private static final int smallDatasetSize = 100;
 	private static final int mediumDatasetSize = 1500;
-	private static final int largeDatasetSize = 7500;
+	private static final int largeDatasetSize = 4500;
 
+	// Alphabet set used for random selection of characters for word generation
 	String [] alphabetSet = { "a", "b", "c", "d", "e", "f", "g",
 			"h", "i", "j", "k", "l", "m", "n",
 			"o", "p", "q", "r", "s", "t", "u",
 			"v", "w", "x", "y", "z" };
 
+	// Different sized datasets with random values in any order
 	ArrayList<String> smallDataset = new ArrayList<String>();
 	ArrayList<String> mediumDataset = new ArrayList<String>();
 	ArrayList<String> largeDataset = new ArrayList<String>();
 
+	// Respective datasets in sorted orders
 	ArrayList<String> sortedSmallDataset = new ArrayList<String>();
 	ArrayList<String> sortedMediumDataset = new ArrayList<String>();
 	ArrayList<String> sortedLargeDataset = new ArrayList<String>();
 
+	
 	// Generates the small dataset of random elements contains elements in random order
 	public void generateSmallDataset() {
 
@@ -69,6 +73,7 @@ public class DataGenerator2 {
 	}
 
 
+	// Generates a 5 letter long random word using combination of alphabetical characters only
 	public String getDataElement() {
 
 		StringBuilder retStr = new StringBuilder();
@@ -84,7 +89,7 @@ public class DataGenerator2 {
 
 	/*
 	 *  DataStructure : ArrayMultliset
-	 *  Dataset : Small
+	 *  Dataset : Small | Medium | Large
 	 *  Distribution : Random
 	 *  Operation : Add
 	 */
@@ -95,7 +100,8 @@ public class DataGenerator2 {
 		// Expecting no shifts
 		String firstElement = arrayMultiset.getArray()[0].getElement();
 		arrayMultiset.add(firstElement);
-
+		
+		
 		// Worst case 1 - Element is not present in the list
 		String uniqueElement = "YogeshShriramNotPresentInSet";
 		arrayMultiset.add(uniqueElement);
@@ -118,7 +124,7 @@ public class DataGenerator2 {
 
 	/*
 	 *  DataStructure : ArrayMultliset
-	 *  Dataset : Small
+	 *  Dataset : Small | Medium | Large
 	 *  Distribution : Random
 	 *  Operation : Remove 
 	 */
@@ -144,7 +150,7 @@ public class DataGenerator2 {
 
 	/*
 	 *  DataStructure : ArrayMultliset
-	 *  Dataset : Small
+	 *  Dataset : Small | Medium | Large
 	 *  Distribution : Random
 	 *  Operation : Print
 	 */
@@ -166,7 +172,7 @@ public class DataGenerator2 {
 
 	/*
 	 *  DataStructure : ArrayMultliset
-	 *  Dataset : Small
+	 *  Dataset : Small | Medium | Large
 	 *  Distribution : Random
 	 *  Operation : Print
 	 */
@@ -192,6 +198,12 @@ public class DataGenerator2 {
 	}
 
 	
+	/*
+	 *  DataStructure : OrderedLinkedList
+	 *  Dataset : Small | Medium | Large
+	 *  Distribution : Alphabetically ascending order of elements
+	 *  Operation : Print
+	 */
 	public void testOrderedListAdd(OrderedLinkedListMultiset orderedList, ArrayList<String> dataset) {
 		
 		// Testing best case - Element to be added is equal to the head element
@@ -224,7 +236,7 @@ public class DataGenerator2 {
 	/*
 	 *  DataStructure : OrderedList
 	 *  Dataset : Small | Medium | Large
-	 *  Distribution : Ascending order
+	 *  Distribution : Alphabetically ascending order of elements in the list 
 	 *  Operation : Remove
 	 */
 	
@@ -251,14 +263,14 @@ public class DataGenerator2 {
 	/*
 	 *  DataStructure : OrderedList
 	 *  Dataset : Small | Medium | Large
-	 *  Distribution : Ascending order
+	 *  Distribution : Alphabetically ascending order of elements in the list 
 	 *  Operation : Intersection
 	 */
 	
 	public void testOrderedListIntersect(OrderedLinkedListMultiset firstOrderedList, OrderedLinkedListMultiset secondOrderedList, int initialSetSize, int LargeDatasetSize)
 	{
 		
-		// Testing best case - Both multiset contains the overlapping elements
+		// Testing best case - Both multiset contains the overlapping elements. running time is n1 as n1 == n2
 		firstOrderedList.intersect(secondOrderedList);
 		
 		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
@@ -291,6 +303,7 @@ public class DataGenerator2 {
 		orderedList.print();
 		
 		// Ordered List contains duplicate elements
+		// Higher complexity is expected as swapping would be required for sorting elements based on occurance count for print operations
 		int iterations = dataset.size();
 		for(int a = 0 ; a < iterations; a++) {
 			orderedList.add( dataset.get( this.randomUtil.nextInt(iterations - 3) ) );
@@ -321,12 +334,71 @@ public class DataGenerator2 {
 			bstSet.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
 		}
 
-		// Usually cases - In between elements - Random insertions
+		// Usual cases - In between elements - Random insertions
 		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
 		for (int i = 0; i < 5; i++) {
 			bstSet.add( randomStrs[i] );
 		}
 		
+		
+		/* Left Skewed Tree
+		 * Elements have been added in decreseing order.
+		 */
+		Collections.reverse(dataset);
+		for(String ele : dataset) {
+			bstSet.add(ele);
+		}
+		
+		//  Best case - Element to be added is equal to the root element
+		rootVal = bstSet.getRoot().getVal();
+		bstSet.add(rootVal);
+
+		// Worst case - Adding an element which is not present in the string
+		bstSet.add(uniqueElement);
+
+		// Adding random duplicates
+		for(int i = 0; i < 5; i++) {
+			bstSet.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
+		}
+
+		// Usually cases - In between elements - Random insertions
+		for (int i = 0; i < 5; i++) {
+			bstSet.add( randomStrs[i] );
+		}
+		
+		/*
+		 * Left Skewed Tree Ends Here
+		 */
+		
+
+		/* Right Skewed Tree
+		 * Elements have been added in increasing order.
+		 */
+		Collections.sort(dataset);
+		for(String ele : dataset) {
+			bstSet.add(ele);
+		}
+		
+		//  Best case - Element to be added is equal to the root element
+		rootVal = bstSet.getRoot().getVal();
+		bstSet.add(rootVal);
+
+		// Worst case - Adding an element which is not present in the string
+		bstSet.add(uniqueElement);
+
+		// Adding random duplicates
+		for(int i = 0; i < 5; i++) {
+			bstSet.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
+		}
+
+		// Usually cases - In between elements - Random insertions
+		for (int i = 0; i < 5; i++) {
+			bstSet.add( randomStrs[i] );
+		}
+		
+		/*
+		 * Right Skewed Tree Ends Here
+		 */
 	}
 	
 	/*

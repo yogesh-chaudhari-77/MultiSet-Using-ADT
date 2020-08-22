@@ -276,6 +276,7 @@ public class BstMultiset extends RmitMultiset
 		
 		// This method returns the string representation of the multiset sorted based on occurance count
 		return multisetArr.print();
+		
 	} // end of OrderedPrint
 
 
