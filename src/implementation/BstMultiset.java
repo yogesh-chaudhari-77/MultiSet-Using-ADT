@@ -221,6 +221,7 @@ public class BstMultiset extends RmitMultiset
 				t.OccuranceCountMinus1();
 				if(t.getOccuranceCount() == 0) {
 					t = null;
+					return;
 				}
 			}else {
 				System.out.println("BSTTree : No such element exist in the multiset");
@@ -234,6 +235,7 @@ public class BstMultiset extends RmitMultiset
 				t.getParent().setLeft(t.getLeft());
 				t.getLeft().setParent( t.getParent() );
 				t = null;
+				return;
 			}
 			
 		}else if( t.getLeft() == null && t.getRight() != null ) {
@@ -244,6 +246,7 @@ public class BstMultiset extends RmitMultiset
 				t.getParent().setRight(t.getRight());
 				t.getRight().setParent( t.getParent() );
 				t = null;
+				return;
 			}
 			
 		}else if (t.getLeft() != null && t.getRight() != null) {
@@ -254,18 +257,27 @@ public class BstMultiset extends RmitMultiset
 				TreeNode inOrderSucc = getInoderSucc(t);
 				
 				t.setVal( inOrderSucc.getVal() );
-				System.out.println("count of inorder : "+inOrderSucc.getOccuranceCount());
 				t.setOccuranceCount( inOrderSucc.getOccuranceCount() );
-				System.out.println("new count of t : "+t.getOccuranceCount());
 				
 				// Check if the inorder successor has right child
 				if(inOrderSucc.getRight() != null) {
 					System.out.println("Inorder has right child");
 					t.setRight( inOrderSucc.getRight() );
 					inOrderSucc.getRight().setParent(t);
+					inOrderSucc.setParent(null);
+					return;
+				}else if (t.getRight() != null) {
+					
+				}
+				else {
+					t.setRight(null);
 				}
 				
-				inOrderSucc = null;
+				if(inOrderSucc.getParent().getLeft() == inOrderSucc) {
+					inOrderSucc.getParent().setLeft(null);
+				}else {
+					inOrderSucc.getParent().setRight(null);
+				}
 				
 				//this.print();
 				System.out.println("Node has been deleted");
