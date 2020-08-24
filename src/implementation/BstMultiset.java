@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 /**
+ *
  * BST implementation of a multiset.  See comments in RmitMultiset to
  * understand what each overriden method is meant to do.
  *
@@ -42,7 +43,7 @@ public class BstMultiset extends RmitMultiset
 	} // end of add()
 
 	
-	public void add(String item, int occurance) {
+	private void add(String item, int occurance) {
 
 		// There is no tree. Create a new root node and assign the value
 		if(root == null) {
@@ -83,7 +84,8 @@ public class BstMultiset extends RmitMultiset
 		}else if(item.compareTo(node.getVal()) == 0) {
 			
 			// Node with same value found. Update the occurance count only
-			node.setOccuranceCount( node.getOccuranceCount() + occurance );
+			// Expected to pass new occurance = old occurance count + extra occurance
+			node.setOccuranceCount( occurance );
 			
 		}
 	}
@@ -206,10 +208,10 @@ public class BstMultiset extends RmitMultiset
 	} // end of contains()
 
 
+	// https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/
 	@Override
 	public void removeOne(String item) {
 
-		
 		TreeNode t = getFirstOccurance(item);
 		
 		// Element is leaf element
@@ -230,6 +232,7 @@ public class BstMultiset extends RmitMultiset
 
 			if(t.getOccuranceCount() == 0) {
 				t.getParent().setLeft(t.getLeft());
+				t.getLeft().setParent( t.getParent() );
 				t = null;
 			}
 			
@@ -238,7 +241,8 @@ public class BstMultiset extends RmitMultiset
 			t.OccuranceCountMinus1();
 			
 			if(t.getOccuranceCount() == 0) {
-				t.getParent().setRight(t.getLeft());
+				t.getParent().setRight(t.getRight());
+				t.getRight().setParent( t.getParent() );
 				t = null;
 			}
 			
@@ -248,8 +252,23 @@ public class BstMultiset extends RmitMultiset
 			
 			if(t.getOccuranceCount() == 0) {
 				TreeNode inOrderSucc = getInoderSucc(t);
+				
 				t.setVal( inOrderSucc.getVal() );
+				System.out.println("count of inorder : "+inOrderSucc.getOccuranceCount());
+				t.setOccuranceCount( inOrderSucc.getOccuranceCount() );
+				System.out.println("new count of t : "+t.getOccuranceCount());
+				
+				// Check if the inorder successor has right child
+				if(inOrderSucc.getRight() != null) {
+					System.out.println("Inorder has right child");
+					t.setRight( inOrderSucc.getRight() );
+					inOrderSucc.getRight().setParent(t);
+				}
+				
 				inOrderSucc = null;
+				
+				//this.print();
+				System.out.println("Node has been deleted");
 			}
 		}
 
@@ -268,6 +287,7 @@ public class BstMultiset extends RmitMultiset
 		while(curr != null) {
 			
 			for (int i = 0; i < curr.getOccuranceCount(); i++) {
+				System.out.println(curr.getVal());
 				multisetArr.add(curr.getVal());
 			}
 			
