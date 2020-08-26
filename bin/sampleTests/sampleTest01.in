@@ -4,9 +4,8 @@ add s1 20
 add s1 70
 add s1 15
 add s1 25
+add s1 75
 add s1 21
 add s1 30
-add s1 75
-add s1 80
-removeOne s1 25
+removeOne s1 20
 print s1

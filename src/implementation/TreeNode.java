@@ -87,4 +87,13 @@ public class TreeNode{
 	public void OccuranceCountMinus1() {
 		this.setOccuranceCount( this.getOccuranceCount() - 1 );	
 	}
+
+	@Override
+	public String toString() {
+		return "TreeNode [val=" + val + ", occuranceCount=" + occuranceCount + ", left=" + left + ", right=" + right
+				+ ", parent=" + parent + "]";
+	}
+	
+	
+	
 }

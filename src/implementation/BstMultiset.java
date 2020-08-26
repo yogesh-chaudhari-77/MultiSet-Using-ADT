@@ -3,7 +3,6 @@ package implementation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 /**
  *
  * BST implementation of a multiset.  See comments in RmitMultiset to
@@ -261,26 +260,29 @@ public class BstMultiset extends RmitMultiset
 				
 				// Check if the inorder successor has right child
 				if(inOrderSucc.getRight() != null) {
-					System.out.println("Inorder has right child");
+					
 					t.setRight( inOrderSucc.getRight() );
 					inOrderSucc.getRight().setParent(t);
 					inOrderSucc.setParent(null);
 					return;
+					
 				}else if (t.getRight() != null) {
 					
+					// Check if the node to be deleted has right child, If it has then we need to delete the inorder successor from it's right subtree
+					if(inOrderSucc.getParent().getLeft().equals(inOrderSucc)) {
+						inOrderSucc.getParent().setLeft(null); 
+					}else {
+						inOrderSucc.getParent().setRight(null); 
+					}
+
+					inOrderSucc.setParent(null);
+					inOrderSucc = null;
 				}
 				else {
+					
+					// If there is no right child then set the right to null
 					t.setRight(null);
 				}
-				
-				if(inOrderSucc.getParent().getLeft() == inOrderSucc) {
-					inOrderSucc.getParent().setLeft(null);
-				}else {
-					inOrderSucc.getParent().setRight(null);
-				}
-				
-				//this.print();
-				System.out.println("Node has been deleted");
 			}
 		}
 
