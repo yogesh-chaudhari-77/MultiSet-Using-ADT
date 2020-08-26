@@ -1,5 +1,8 @@
 package implementation;
 
+/**
+ * @Author Sriram Senthilnathan, RMIT University, Master of Information Technology
+ */
 public class ArrayObject {
 
 	private String element;

@@ -1,5 +1,12 @@
 package implementation;
 
+/**
+ * Class defines the blueprint of Node used in Tree Data Structure
+ * 
+ * @Author Yogeshwar Chaudhari, RMIT University, Master of Information Technology
+ * @contributor : Sriram Senthilnathan 
+ */
+
 public class TreeNode{
 	
 	// Stores the value of the node

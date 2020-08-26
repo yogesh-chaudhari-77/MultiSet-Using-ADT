@@ -1,5 +1,12 @@
 package implementation;
 
+/**
+ * Running different test cases for analysing the Multiset implementation using different ADT such as 
+ * LinkedList, Array, Doubly Ordered Linked List and BST
+ * 
+ * @Author Yogeshwar Chaudhari & Sriram Senthilnathan  RMIT University, Master of Information Technology
+ */
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -9,6 +16,7 @@ public class DataGenerator {
 
 	private Random randomUtil = new Random();
 
+	// Constants
 	private static final int smallDatasetSize = 100;
 	private static final int mediumDatasetSize = 1500;
 	private static final int largeDatasetSize = 10000;
@@ -18,14 +26,18 @@ public class DataGenerator {
 			"o", "p", "q", "r", "s", "t", "u",
 			"v", "w", "x", "y", "z" };
 
+	// Sample random datasets
 	ArrayList<String> smallDataset = new ArrayList<String>();
 	ArrayList<String> mediumDataset = new ArrayList<String>();
 	ArrayList<String> largeDataset = new ArrayList<String>();
 	
+	
+	// Sample random ordered datasets for special cases analysis
 	ArrayList<String> sortedSmallDataset = new ArrayList<String>();
 	ArrayList<String> sortedMediumDataset = new ArrayList<String>();
 	ArrayList<String> sortedLargeDataset = new ArrayList<String>();
 
+	
 	// Generates the small dataset of random elements contains elements in random order
 	public void generateSmallDataset() {
 
@@ -71,7 +83,11 @@ public class DataGenerator {
 	public String getDataElement() {
 
 		StringBuilder retStr = new StringBuilder();
+
+		// Initiate forming a 5 letter word
 		for(int i = 0; i < 5; i++) {
+			
+			// Select random alphabate from assorted list of 26 alphabates
 			int a = this.randomUtil.nextInt(26);
 			retStr.append(this.alphabetSet[a]);
 		}

@@ -9,6 +9,17 @@ import java.util.List;
  * understand what each overriden method is meant to do.
  *
  * @author Jeffrey Chan & Yongli Ren, RMIT 2020
+ * @contributor Yogeshwar Chaudhari, RMIT University, Master of Information Technology
+ * 
+ * References
+ * [1] Linked List | Set 1 (Introduction) - GeeksforGeeks
+   Linked List | Set 1 (Introduction) - GeeksforGeeks (2013). Available at: https://www.geeksforgeeks.org/linked-list-set-1-introduction/ (Accessed: 26 August 2020).
+
+ * [2] Linked List | Set 2 (Inserting a node) - GeeksforGeeks
+   Linked List | Set 2 (Inserting a node) - GeeksforGeeks (2013). Available at: https://www.geeksforgeeks.org/linked-list-set-2-inserting-a-node/ (Accessed: 26 August 2020).
+   
+   [3] Linked List | Set 3 (Deleting a node) - GeeksforGeeks
+   Linked List | Set 3 (Deleting a node) - GeeksforGeeks (2014). Available at: https://www.geeksforgeeks.org/linked-list-set-3-deleting-node/ (Accessed: 26 August 2020).
  */
 
 public class OrderedLinkedListMultiset extends RmitMultiset
@@ -22,6 +33,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
 
 	@Override
+	//[2]
 	public void add(String item) {
 
 		// If there is no list, create a head node
@@ -129,7 +141,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 					
 				}else if(curr.getNext() == null) {
 					
-					// End of the list
+					// End of the list reached. Add new tail element.
 					ListNode newNode = new ListNode(item);
 					newNode.setOccuranceCount(occuranceCount);
 					curr.setNext(newNode);
@@ -158,6 +170,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 			while( (currNode != null) && (currNode.getVal().compareTo(item) <= 0) ) {
 
 				if(currNode.getVal().compareTo(item) == 0) {
+					// Element found. Get the occurance count and return
 					occuranceCount = currNode.getOccuranceCount();
 					break;
 				}
@@ -210,6 +223,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 			// Iterate till end of the list is reached & current node value is less than or equal to provided item. List is ordered
 			while( (currNode != null) && (currNode.getVal().compareTo(item) <= 0) ) {
 
+				// Current node matches with the item, return true
 				if(currNode.getVal().compareTo(item) == 0) {
 					contains = true;
 					break;
@@ -224,6 +238,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
 
 	@Override
+	//[3]
 	public void removeOne(String item) {
 
 		// Check if the list is there or not
@@ -382,6 +397,8 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 			if(firstSetNode.getVal().compareTo(secSetNode.getVal()) == 0){
 
 				retMultiset.add(firstSetNode.getVal(), Math.min(firstSetNode.getOccuranceCount(), secSetNode.getOccuranceCount()));
+
+				// Since common, advance both cursors
 				firstSetNode = firstSetNode.getNext();
 				secSetNode = secSetNode.getNext();
 				
@@ -420,7 +437,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 			// Both values are same, so could be part of set if
 			if(firstSetNode.getVal().compareTo(secSetNode.getVal()) == 0){
 				
-				// set one contains more occurance than set 2
+				// Multiset one contains more occurance than set 2, hence difference occurance will be inserted into the tree
 				if(firstSetNode.getOccuranceCount() > secSetNode.getOccuranceCount()) {
 					retMultiset.add(firstSetNode.getVal(), ( firstSetNode.getOccuranceCount() - secSetNode.getOccuranceCount() ));
 				}
@@ -453,7 +470,9 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
 
 
-	// Getter Setters Starts Here
+	/*
+	 * Getter Setters Starts Here
+	 */
 
 	public ListNode getHead() {
 		return head;
@@ -464,6 +483,8 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 		this.head = head;
 	}
 
-	// Getter Setters Ends Here
+	/*
+	 *  Getter Setters Ends Here
+	 */
 
 } // end of class OrderedLinkedListMultiset

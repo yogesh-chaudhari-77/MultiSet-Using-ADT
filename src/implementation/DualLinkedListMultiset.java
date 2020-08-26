@@ -9,6 +9,7 @@ import java.util.List;
  * understand what each overriden method is meant to do.
  *
  * @author Jeffrey Chan & Yongli Ren, RMIT 2020
+ * @Contributors Sriram Senthilnathan, RMIT University, Master of Information Technology
  */
 public class DualLinkedListMultiset extends RmitMultiset
 {
