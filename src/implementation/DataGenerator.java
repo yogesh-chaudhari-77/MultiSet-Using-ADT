@@ -1,43 +1,39 @@
 package implementation;
 
-/**
- * Running different test cases for analysing the Multiset implementation using different ADT such as 
- * LinkedList, Array, Doubly Ordered Linked List and BST
- * 
- * @Author Yogeshwar Chaudhari & Sriram Senthilnathan  RMIT University, Master of Information Technology
- */
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class DataGenerator {
+import javax.naming.InitialContext;
 
+public class DataGenerator {
 	private Random randomUtil = new Random();
 
 	// Constants
 	private static final int smallDatasetSize = 100;
 	private static final int mediumDatasetSize = 1500;
-	private static final int largeDatasetSize = 10000;
+	private static final int largeDatasetSize = 4500;
 
+	// Alphabet set used for random selection of characters for word generation
 	String [] alphabetSet = { "a", "b", "c", "d", "e", "f", "g",
 			"h", "i", "j", "k", "l", "m", "n",
 			"o", "p", "q", "r", "s", "t", "u",
 			"v", "w", "x", "y", "z" };
 
-	// Sample random datasets
+
+	// Different sized datasets with random values in any order
 	ArrayList<String> smallDataset = new ArrayList<String>();
 	ArrayList<String> mediumDataset = new ArrayList<String>();
 	ArrayList<String> largeDataset = new ArrayList<String>();
-	
-	
-	// Sample random ordered datasets for special cases analysis
+
+
+	// Respective datasets in sorted orders
 	ArrayList<String> sortedSmallDataset = new ArrayList<String>();
 	ArrayList<String> sortedMediumDataset = new ArrayList<String>();
 	ArrayList<String> sortedLargeDataset = new ArrayList<String>();
 
-	
+
 	// Generates the small dataset of random elements contains elements in random order
 	public void generateSmallDataset() {
 
@@ -60,7 +56,7 @@ public class DataGenerator {
 			this.mediumDataset.add(a);
 			this.sortedMediumDataset.add(a);
 		}
-		
+
 		Collections.sort(this.sortedMediumDataset);
 		System.out.println("Small Dataset Size : "+this.mediumDataset.size());
 	}
@@ -74,19 +70,20 @@ public class DataGenerator {
 			this.largeDataset.add(a);
 			this.sortedLargeDataset.add(a);
 		}
-		
+
 		Collections.sort(this.sortedLargeDataset);
 		System.out.println("Small Dataset Size : "+this.largeDataset.size());
 	}
-	
 
+
+	// Generates a 5 letter long random word using combination of alphabetical characters only
 	public String getDataElement() {
 
 		StringBuilder retStr = new StringBuilder();
 
 		// Initiate forming a 5 letter word
 		for(int i = 0; i < 5; i++) {
-			
+
 			// Select random alphabate from assorted list of 26 alphabates
 			int a = this.randomUtil.nextInt(26);
 			retStr.append(this.alphabetSet[a]);
@@ -99,1517 +96,1049 @@ public class DataGenerator {
 
 	/*
 	 *  DataStructure : ArrayMultliset
-	 *  Dataset : Small
+	 *  Dataset : Small | Medium | Large
 	 *  Distribution : Random
 	 *  Operation : Add
 	 */
 
-	public void testArraySetAdd(ArrayMultiset arrayMultiset)
+	public void testArraySetAdd(ArrayMultiset arrayMultiset, ArrayList<String> dataset)
 	{	
 		// Testing best case - Adding duplicate element. First one.
 		// Expecting no shifts
+		long startTime = 0, elapsedTime = 0;
+
+
 		String firstElement = arrayMultiset.getArray()[0].getElement();
+
+		startTime = TimeUtil.startTime();
 		arrayMultiset.add(firstElement);
-		
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+
 		// Worst case 1 - Element is not present in the list
+
+		startTime = TimeUtil.startTime();
 		String uniqueElement = "YogeshShriramNotPresentInSet";
 		arrayMultiset.add(uniqueElement);
-		
-		// Worst cases - In between elements
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Adding random duplicates
+
+
+		int datasetSize = dataset.size();
+		for(int i = 0; i < 5; i++) {
+
+			startTime = TimeUtil.startTime();
+			arrayMultiset.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		}
+
+
 		// Random cases. Elements could be added in between
 		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
 		for (int i = 0; i < 5; i++) {
+
+			startTime = TimeUtil.startTime();
 			arrayMultiset.add( randomStrs[i] );
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 		}
 	}
 
 
 	/*
 	 *  DataStructure : ArrayMultliset
-	 *  Dataset : Small
+	 *  Dataset : Small | Medium | Large
 	 *  Distribution : Random
 	 *  Operation : Remove 
 	 */
 	public void testArraySetRemove(ArrayMultiset arrayMultiset, ArrayList<String> dataset, int dataSetSize) {
 
+		long startTime = 0, elapsedTime = 0;
+
+
 		// Testing worst case - Element to be removed is first element with 1 occurance only. Expecting entire arrayShift
+
 		String firstElement = arrayMultiset.getArray()[0].getElement();
+
+		startTime = TimeUtil.startTime();
 		arrayMultiset.removeOne(firstElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
 
 		// Testing worst case - Largest element to be deleted but not in the list
 		// Entire list to be traversed
 		String largestElement = "YogeshSriramNotInTheList";
-		arrayMultiset.removeOne(largestElement);
 
-		
+		startTime = TimeUtil.startTime();
+		arrayMultiset.removeOne(largestElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
 		// Worst / Average case - In between elements
 		// Random cases. Elements could be any where in the list
 		for (int i = 0; i < 5; i++) {
+
+			startTime = TimeUtil.startTime();
 			arrayMultiset.removeOne( dataset.get( this.randomUtil.nextInt( dataSetSize - 10 ) ) );
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 		}
 	}
-	
-	
+
+
 	/*
 	 *  DataStructure : ArrayMultliset
-	 *  Dataset : Small
+	 *  Dataset : Small | Medium | Large
 	 *  Distribution : Random
 	 *  Operation : Print
 	 */
-	public void testArraySetPrint(ArrayMultiset arrayMultiset) {
+	public void testArraySetPrint(ArrayMultiset arrayMultiset, ArrayList<String> dataset) {
+
+		long startTime = 0, elapsedTime = 0;
+
+
+		// Single occurance - Best case for array
+
+		startTime = TimeUtil.startTime();
 		arrayMultiset.print();
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Worst case - Random duplicate elements are present
+
+		int iterations = dataset.size();
+		for(int a = 0 ; a < iterations; a++) {
+			arrayMultiset.add( dataset.get( this.randomUtil.nextInt(iterations - 3) ) );
+		}
+
+
+		startTime = TimeUtil.startTime();
+		arrayMultiset.print();
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 	}
-	
-	
+
+
 	/*
 	 *  DataStructure : ArrayMultliset
-	 *  Dataset : Small
+	 *  Dataset : Small | Medium | Large
 	 *  Distribution : Random
 	 *  Operation : Print
 	 */
-	public void testArraySetIntersect(ArrayMultiset first, ArrayMultiset second) {
-		
+	public void testArraySetIntersect(ArrayMultiset first, ArrayMultiset second, int initialSetSize, int largeSetSize) {
+
+		long startTime = 0, elapsedTime = 0;
+
+		// Common elements in same order
+
+		startTime = TimeUtil.startTime();
 		first.intersect(second);
-		
-	}
-	
-	
-	/*
-	 *  DataStructure : OrderedList
-	 *  Dataset : Small
-	 *  Distribution : Ascending order
-	 *  Operation : Add
-	 */
-	
-	public void testOrderedListWithSmallDatadaset()
-	{
-		// Create a multiset before performing the operation
-		OrderedLinkedListMultiset smallOrderedList = new OrderedLinkedListMultiset();
-		for(String element : this.smallDataset) {
-			smallOrderedList.add(element);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Worst case - no elements are overlapping - Loop will run n1xn2 times
+		second = new ArrayMultiset();
+		for(int a = 0; a < initialSetSize; a++) {
+			second.add( this.getDataElement() );
 		}
 
+		startTime = TimeUtil.startTime();
+		first.intersect(second);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Worse case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
+		for(int a = 0; a < largeSetSize; a++) {
+			second.add( this.getDataElement() );
+		}
+
+		startTime = TimeUtil.startTime();
+		first.intersect(second);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+	}
+
+
+	/*
+	 *  DataStructure : OrderedLinkedList
+	 *  Dataset : Small | Medium | Large
+	 *  Distribution : Alphabetically ascending order of elements
+	 *  Operation : Print
+	 */
+	public void testOrderedListAdd(OrderedLinkedListMultiset orderedList, ArrayList<String> dataset) {
+
+		long startTime = 0, elapsedTime = 0;
 
 		// Testing best case - Element to be added is equal to the head element
-		String firstElement = smallOrderedList.head.getVal();
-		smallOrderedList.add(firstElement);
+		String firstElement = orderedList.head.getVal();		
+
+		startTime = TimeUtil.startTime();
+		orderedList.add(firstElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
 
 		// Testing best case - Element to be added is equal to the head element
 		String smallestElement = "a";
-		smallOrderedList.add(smallestElement);
 
-		// Adding an element which is not present in the string
+		startTime = TimeUtil.startTime();
+		orderedList.add(smallestElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Worst case - Adding an element which is not present in the string hence will be added at last
+		// Expecting 1 complete traversal.
 		String uniqueElement = "YogeshShriram";
-		smallOrderedList.add(uniqueElement);
+
+		startTime = TimeUtil.startTime();
+		orderedList.add(uniqueElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Adding random duplicates
+		int datasetSize = dataset.size();
+		for(int i = 0; i < 5; i++) {
+
+			startTime = TimeUtil.startTime();
+			orderedList.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		}
 
 		// Average case - In between elements
 		// Random cases. Elements could be added in between
 		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
 		for (int i = 0; i < 5; i++) {
-			
-			smallOrderedList.add( randomStrs[i] );
-		}
-		
-		//System.out.println(smallOrderedList.print());
-	}
 
+			startTime = TimeUtil.startTime();
+			orderedList.add( randomStrs[i] );
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		}
+	}
 
 	/*
 	 *  DataStructure : OrderedList
-	 *  Dataset : Medium
-	 *  Distribution : Ascending order
-	 *  Operation : Add
-	 */
-	
-	public void testOrderedListWithMediumDatadaset()
-	{
-
-		OrderedLinkedListMultiset mediumOrderedList = new OrderedLinkedListMultiset();
-
-		// Preparing medium sized dataset
-		for(String element : this.mediumDataset) {
-			mediumOrderedList.add(element);
-		}
-
-
-		// Testing best case - Element to be added is smaller than head element 
-		// Hence the new element will become new head - No shifting required
-		String smallestElement = "a";
-		mediumOrderedList.add(smallestElement); 
-
-		// Testing best case - Element to be added is equal to the head element
-		String firstElement = mediumOrderedList.getHead().getVal();
-		mediumOrderedList.add(firstElement);
-
-		// Worst case - Adding an element which is not present in the string
-		// Full list traversal is required. Element will be added at the end
-		String uniqueElement = "YogeshShriram";
-		mediumOrderedList.add(uniqueElement);
-
-
-		// Average case - In between elements
-		// Random cases. Elements could be added in between
-		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
-		for (int i = 0; i < 5; i++) {
-			mediumOrderedList.add( randomStrs[i] );
-		}
-		
-		//System.out.println(mediumOrderedList.print());
-	}
-	
-
-	/*
-	 *  DataStructure : OrderedList
-	 *  Dataset : Large
-	 *  Distribution : Ascending order
-	 *  Operation : Add
-	 */
-	public void testOrderedListWithLargeDatadaset()
-	{
-
-		OrderedLinkedListMultiset largeOrderedList = new OrderedLinkedListMultiset();
-
-		// Populate the dataset
-		for(String element : this.largeDataset) {
-			largeOrderedList.add(element);
-		}
-
-
-		// Testing best case - Element to be added is equal to the head element
-		String firstElement = largeOrderedList.getHead().getVal();
-		largeOrderedList.add(firstElement);
-
-		// Testing first case - Element to be added is equal to the head element
-		String smallestElement = "a";
-		largeOrderedList.add(smallestElement);
-
-		// Adding an element which is not present in the string
-		String uniqueElement = "YogeshShriram";
-		largeOrderedList.add(uniqueElement);
-
-		// Adding random element which is already present in the list
-		String alreadyPresentElement = this.largeDataset.get(  this.largeDataset.size() / 2);
-		largeOrderedList.add(alreadyPresentElement);
-		
-		// Random cases. Elements could be added in between
-		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"}; 
-		for (int i = 0; i < 5; i++) {
-			largeOrderedList.add( randomStrs[i] );
-		}
-		
-		//System.out.println(largeOrderedList.print());
-	}
-	
-	
-	
-
-	/*
-	 *  DataStructure : OrderedList
-	 *  Dataset : Small
-	 *  Distribution : Ascending order
+	 *  Dataset : Small | Medium | Large
+	 *  Distribution : Alphabetically ascending order of elements in the list 
 	 *  Operation : Remove
 	 */
-	
-	public void testOrderedListRemoveWithSmallDatadaset()
+
+	public void testOrderedListRemove(OrderedLinkedListMultiset orderedList, ArrayList<String> sortedDataSet, int datasetSize)
 	{
-		// Create a multiset before performing the operation
-		OrderedLinkedListMultiset smallOrderedList = new OrderedLinkedListMultiset();
-		for(String element : this.smallDataset) {
-			smallOrderedList.add(element);
-		}
+		long startTime = 0, elapsedTime = 0;
 
 		// Testing best case - Element to be removed is equal to the head element
-		String firstElement = smallOrderedList.head.getVal();
-		smallOrderedList.removeOne(firstElement);
+		String firstElement = orderedList.getHead().getVal();
+
+		startTime = TimeUtil.startTime();
+		orderedList.removeOne(firstElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
 		// Testing worst case - Largest element to be deleted but not in the list
 		// Entire list to be traversed
 		String largestElement = "YogeshSriramNotInTheList";
-		smallOrderedList.removeOne(largestElement);
-	
-		
+
+		startTime = TimeUtil.startTime();
+		orderedList.removeOne(largestElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the list
 		for (int i = 0; i < 5; i++) {
-			smallOrderedList.removeOne( this.sortedSmallDataset.get( this.randomUtil.nextInt( smallDatasetSize - 10 ) ) );
+			startTime = TimeUtil.startTime();
+			orderedList.removeOne( sortedDataSet.get( this.randomUtil.nextInt( datasetSize - 10 ) ) );
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 		}
 	}
 
 
 	/*
 	 *  DataStructure : OrderedList
-	 *  Dataset : Medium
-	 *  Distribution : Ascending order
-	 *  Operation : Remove
+	 *  Dataset : Small | Medium | Large
+	 *  Distribution : Alphabetically ascending order of elements in the list 
+	 *  Operation : Intersection
 	 */
-	
-	public void testOrderedListRemoveWithMediumDatadaset()
+
+	public void testOrderedListIntersect(OrderedLinkedListMultiset firstOrderedList, OrderedLinkedListMultiset secondOrderedList, int initialSetSize, int LargeDatasetSize)
 	{
+		long startTime = 0, elapsedTime = 0;
 
-		OrderedLinkedListMultiset mediumOrderedList = new OrderedLinkedListMultiset();
 
-		// Preparing medium sized dataset
-		for(String element : this.mediumDataset) {
-			mediumOrderedList.add(element);
+		// Testing best case - Both multiset contains the overlapping elements. running time is n1 as n1 == n2
+		startTime = TimeUtil.startTime();
+		firstOrderedList.intersect(secondOrderedList);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+
+		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
+		secondOrderedList = new OrderedLinkedListMultiset();
+		for(int a = 0; a < initialSetSize; a++) {
+			secondOrderedList.add( this.getDataElement() );
 		}
 
+		startTime = TimeUtil.startTime();
+		firstOrderedList.intersect(secondOrderedList);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
-		// Testing best case - Element to be deleted is equal to the head element
-		String firstElement = mediumOrderedList.getHead().getVal();
-		mediumOrderedList.removeOne(firstElement);
+		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
+		for(int a = 0; a < LargeDatasetSize; a++) {
 
-		// Testing worst case - Largest element to be deleted but not in the list
-		// Entire list to be traversed
-		String uniqueElement = "YogeshSriramNotInTheList";
-		mediumOrderedList.removeOne(uniqueElement);
-
-		// Average case - In between elements
-		// Random cases. Elements could be any where in the list
-		for (int i = 0; i < 5; i++) {
-			mediumOrderedList.removeOne( this.sortedMediumDataset.get( this.randomUtil.nextInt( mediumDatasetSize - 100 ) ) );
+			secondOrderedList.add( this.getDataElement() );
 		}
+
+		startTime = TimeUtil.startTime();
+		firstOrderedList.intersect(secondOrderedList);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 	}
-	
+
 
 	/*
 	 *  DataStructure : Ordered Linked List
-	 *  Dataset : Large
+	 *  Dataset : Small | Medium | Large
 	 *  Distribution : Ascending order
-	 *  Operation : Remove
+	 *  Operation : Print - Ordered by instance count
 	 */
-	public void testOrderedListRemoveWithLargeDatadaset()
+	public void testOrderedListPrint(OrderedLinkedListMultiset orderedList, ArrayList<String> dataset)
 	{
+		long startTime = 0, elapsedTime = 0;
 
-		OrderedLinkedListMultiset largeOrderedList = new OrderedLinkedListMultiset();
 
-		// Populate the dataset
-		for(String element : this.largeDataset) {
-			largeOrderedList.add(element);
+		// Best case : All unique elements - Bubble sort can be stopped in first iteration
+		startTime = TimeUtil.startTime();
+		orderedList.print();
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+
+		// Ordered List contains duplicate elements
+		// Higher complexity is expected as swapping would be required for sorting elements based on occurance count for print operations
+		int iterations = dataset.size();
+		for(int a = 0 ; a < iterations; a++) {
+			orderedList.add( dataset.get( this.randomUtil.nextInt(iterations - 3) ) );
 		}
 
-
-		// Testing best case - Element to be deleted is equal to the head element
-		String firstElement = largeOrderedList.getHead().getVal();
-		largeOrderedList.removeOne(firstElement);
-
-		
-		// Element to be deleted is largest element and not present in the list
-		String uniqueElement = "YogeshSriramNotInTheList";
-		largeOrderedList.removeOne(uniqueElement);
-
-
-		// Average case - In between elements
-		// Random cases. Elements could be any where in the list
-		for (int i = 0; i < 6; i++) {
-			largeOrderedList.removeOne( this.sortedLargeDataset.get( this.randomUtil.nextInt( largeDatasetSize - 100 ) ) );
-		}
+		startTime = TimeUtil.startTime();
+		orderedList.print();
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 	}
-	
-	
-	/*
-	 *  DataStructure : TreeSet
-	 *  Dataset : Small
-	 *  Distribution : Ascending order
-	 *  Operation : Add
-	 */
-	public void testTreeSetWithSmallDatadaset()
-	{
-
-		// Create a multiset before performing the operation
-		BstMultiset smallBSTSet = new BstMultiset();
-
-		for(String element : this.smallDataset) {
-			smallBSTSet.add(element);
-		}
-
-
-		// Testing best case - Element to be added is equal to the head element
-		String firstElement = smallBSTSet.getRoot().getVal();
-		smallBSTSet.add(firstElement);
-
-		// Testing best case - Element to be added is equal to the head element
-		String smallestElement = "a";
-		smallBSTSet.add(smallestElement);
-
-		// Adding an element which is not present in the string
-		String uniqueElement = "YogeshShriram";
-		smallBSTSet.add(uniqueElement);
-
-		// Adding random element
-		String alreadyPresentElement = this.smallDataset.get( this.smallDataset.size() / 2 );
-		smallBSTSet.add(alreadyPresentElement);
-		
-		// Average case - In between elements
-		// Random cases. Elements could be added in between
-		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
-		for (int i = 0; i < 5; i++) {
-			smallBSTSet.add( randomStrs[i] );
-		}
-	}
-
 
 	/*
 	 *  DataStructure : TreeSet
-	 *  Dataset : Medium
-	 *  Distribution : Ascending order
+	 *  Dataset : Small | Medium | Large
+	 *  Distribution : BST Behaviour
 	 *  Operation : Add
 	 */
-	public void testTreeSetWithMediumDatadaset()
+	public void testTreeSetAdd(BstMultiset bstSet, ArrayList<String> dataset) 
 	{
-
-		BstMultiset mediumBSTSet = new BstMultiset();
-
-		// Preparing medium sized dataset
-		for(String element : this.mediumDataset) {
-			mediumBSTSet.add(element);
-		}
+		long startTime = 0, elapsedTime = 0;
 
 
-		// Element to be added is smaller than head element 
-		// Hence the new element will become new head - No shifting required
-		String smallestElement = "a";
-		mediumBSTSet.add(smallestElement); 
+		//  Best case - Element to be added is equal to the root element
+		String rootVal = bstSet.getRoot().getVal();
 
-		// Testing best case - Element to be added is equal to the head element
-		String firstElement = mediumBSTSet.getRoot().getVal();
-		mediumBSTSet.add(firstElement);
+		startTime = TimeUtil.startTime();
+		bstSet.add(rootVal);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
 		// Worst case - Adding an element which is not present in the string
-		// Full list traversal is required. Element will be added at the end
 		String uniqueElement = "YogeshShriram";
-		mediumBSTSet.add(uniqueElement);
+		startTime = TimeUtil.startTime();
+		bstSet.add(uniqueElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
-		// Average case - Adding random element which is already present in the list
-		// Some list traversal is required. Average case
-		String alreadyPresentElement = this.mediumDataset.get((this.mediumDataset.size() / 2));
-		mediumBSTSet.add(alreadyPresentElement);
-		
-		// Average case - In between elements
-		// Random cases. Elements could be added in between
+		// Adding random duplicates
+		int datasetSize = dataset.size();
+		for(int i = 0; i < 5; i++) {
+
+			startTime = TimeUtil.startTime();
+			bstSet.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		}
+
+		// Usual cases - In between elements - Random insertions
 		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
 		for (int i = 0; i < 5; i++) {
-			mediumBSTSet.add( randomStrs[i] );
-		}
-	}
 
-
-	/*
-	 *  DataStructure : TreeSet
-	 *  Dataset : Large
-	 *  Distribution : Ascending order
-	 *  Operation : Add
-	 */
-	public void testTreeSetWithLargeDatadaset()
-	{
-		BstMultiset mediumBSTSet = new BstMultiset();
-
-		// Populate the dataset
-		for(String element : this.largeDataset) {
-			mediumBSTSet.add(element);
+			startTime = TimeUtil.startTime();
+			bstSet.add( randomStrs[i] );
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 		}
 
 
-		// Testing best case - Element to be added is equal to the head element
-		String firstElement = mediumBSTSet.getRoot().getVal();
-		mediumBSTSet.add(firstElement);
+		/* Left Skewed Tree
+		 * Elements have been added in decreseing order.
+		 */
+		Collections.reverse(dataset);
+		for(String ele : dataset) {
+			bstSet.add(ele);
+		}
 
-		// Testing first case - Element to be added is equal to the head element
-		String smallestElement = "a";
-		mediumBSTSet.add(smallestElement);
+		//  Best case - Element to be added is equal to the root element
+		rootVal = bstSet.getRoot().getVal();
 
-		// Adding an element which is not present in the string
-		String uniqueElement = "YogeshShriram";
-		mediumBSTSet.add(uniqueElement);
+		startTime = TimeUtil.startTime();
+		bstSet.add(rootVal);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
-		// Adding random element which is already present in the list
-		String alreadyPresentElement = this.largeDataset.get(  this.largeDataset.size() / 2);
-		mediumBSTSet.add(alreadyPresentElement);
-		
-		// Random cases. Elements could be added in between
-		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"}; 
+
+		// Worst case - Adding an element which is not present in the string
+		startTime = TimeUtil.startTime();
+		bstSet.add(uniqueElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Adding random duplicates
+		for(int i = 0; i < 5; i++) {
+
+			startTime = TimeUtil.startTime();
+			bstSet.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		}
+
+		// Usually cases - In between elements - Random insertions
 		for (int i = 0; i < 5; i++) {
-			mediumBSTSet.add( randomStrs[i] );
+
+			startTime = TimeUtil.startTime();
+			bstSet.add( randomStrs[i] );
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 		}
+
+		/*
+		 * Left Skewed Tree Ends Here
+		 */
+
+
+		/* Right Skewed Tree
+		 * Elements have been added in increasing order.
+		 */
+		Collections.sort(dataset);
+		for(String ele : dataset) {
+
+			startTime = TimeUtil.startTime();
+			bstSet.add(ele);
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		}
+
+		//  Best case - Element to be added is equal to the root element
+		rootVal = bstSet.getRoot().getVal();
+
+		startTime = TimeUtil.startTime();
+		bstSet.add(rootVal);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Worst case - Adding an element which is not present in the string
+		startTime = TimeUtil.startTime();
+		bstSet.add(uniqueElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Adding random duplicates
+		for(int i = 0; i < 5; i++) {
+
+			startTime = TimeUtil.startTime();
+			bstSet.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		}
+
+		// Usually cases - In between elements - Random insertions
+		for (int i = 0; i < 5; i++) {
+			startTime = TimeUtil.startTime();
+			bstSet.add( randomStrs[i] );
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		}
+
+		/*
+		 * Right Skewed Tree Ends Here
+		 */
 	}
-	
-	
+
 	/*
 	 *  DataStructure : TreeSet
-	 *  Dataset : Small
-	 *  Distribution : Ascending order
+	 *  Dataset : Small | Medium | Large
+	 *  Distribution : BST Behaviour
 	 *  Operation : Remove
 	 */
-	
-	public void testTreeSetRemoveWithSmallDatadaset()
+
+	public void testTreeSetRemove(BstMultiset bstSet, ArrayList<String> dataset, int datasetSize)
 	{
-		// Create a multiset before performing the operation
-		BstMultiset firstBSTSet = new BstMultiset();
-		
-		for(String element : this.smallDataset) {
-			firstBSTSet.add(element);
-		}
+
+		long startTime = 0, elapsedTime = 0;
 
 		// Testing best case - Element to be removed is equal to the root element
-		String firstElement = firstBSTSet.getRoot().getVal();
-		firstBSTSet.removeOne(firstElement);
-	
-		
+		String rootVal = bstSet.getRoot().getVal();
+
+		startTime = TimeUtil.startTime();
+		bstSet.removeOne(rootVal);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
 		// Average case - In between elements
-		// Random cases. Elements could be any where in the list
+		// Random cases. Elements could be any where in the tree
 		for (int i = 0; i < 5; i++) {
-			firstBSTSet.removeOne( this.sortedSmallDataset.get( this.randomUtil.nextInt( smallDatasetSize - 10 ) ) );
+
+			startTime = TimeUtil.startTime();
+			bstSet.removeOne( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ) );
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 		}
+
 	}
 
 
 	/*
 	 *  DataStructure : TreeSet
-	 *  Dataset : Medium
-	 *  Distribution : Ascending order
-	 *  Operation : Remove
+	 *  Dataset : Small | Medium | Large
+	 *  Distribution : BST Behaviour
+	 *  Operation : Intersection
 	 */
-	
-	public void testTreeSetRemoveWithMediumDatadaset()
+
+	public void testTreeSetIntersect(BstMultiset firstTree, BstMultiset secondTree, int initialDatasetSize, int largeDatasetSize)
 	{
+		long startTime = 0, elapsedTime = 0;
 
-		BstMultiset multiset = new BstMultiset();
+		// Testing best case - Both multiset contains the overlapping elements
+		startTime = TimeUtil.startTime();
+		firstTree.intersect(secondTree);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
-		// Preparing medium sized dataset
-		for(String element : this.mediumDataset) {
-			multiset.add(element);
+		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
+		secondTree = new BstMultiset();
+		for(int a = 0; a < initialDatasetSize; a++) {
+			secondTree.add( this.getDataElement() );
 		}
 
+		startTime = TimeUtil.startTime();
+		firstTree.intersect(secondTree);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
-		// Testing best case - Element to be deleted is equal to the head element
-		String firstElement = multiset.getRoot().getVal();
-		multiset.removeOne(firstElement);
-
-		// Average case - In between elements
-		// Random cases. Elements could be any where in the list
-		for (int i = 0; i < 5; i++) {
-			multiset.removeOne( this.sortedMediumDataset.get( this.randomUtil.nextInt( mediumDatasetSize - 100 ) ) );
+		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
+		for(int a = 0; a < largeDatasetSize; a++) {
+			secondTree.add( this.getDataElement() );
 		}
+
+		startTime = TimeUtil.startTime();
+		firstTree.intersect(secondTree);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 	}
-	
-
-	/*
-	 *  DataStructure : TreeSet
-	 *  Dataset : Large
-	 *  Distribution : BST distribtion (Not Hight Balanced)
-	 *  Operation : Remove
-	 */
-	public void testTreeSetRemoveWithLargeDatadaset()
-	{
-
-		BstMultiset multiset = new BstMultiset();
-
-		// Populate the dataset
-		for(String element : this.largeDataset) {
-			multiset.add(element);
-		}
 
 
-		// Testing best case - Element to be deleted is equal to the root element
-		String firstElement = multiset.getRoot().getVal();
-		multiset.removeOne(firstElement);
 
-		
-		// Average case - In between elements
-		// Random cases. Elements could be any where in the list
-		for (int i = 0; i < 6; i++) {
-			multiset.removeOne( this.sortedLargeDataset.get( this.randomUtil.nextInt( largeDatasetSize - 100 ) ) );
-		}
-	}
-	
-	
-	/*
-	 *  DataStructure : Ordered Linked List
-	 *  Dataset : Small
-	 *  Distribution : Ascending order
-	 *  Operation : Print - Ordered by instance count
-	 */
-	public void testOrderedListPrintWithSmallDatadaset()
-	{
-		// Create a multiset before performing the operation
-		OrderedLinkedListMultiset smallOrderedList = new OrderedLinkedListMultiset();
-		for(String element : this.smallDataset) {
-			smallOrderedList.add(element);
-		}
-
-		smallOrderedList.print();
-		
-		// Add duplicate data to achieve higher complexity
-	}
-	
-	/*
-	 *  DataStructure : Ordered Linked List
-	 *  Dataset : Medium
-	 *  Distribution : Ascending order
-	 *  Operation : Print - Ordered by instance count
-	 */
-	public void testOrderedListPrintWithMediumDatadaset()
-	{
-		// Create a multiset before performing the operation
-		OrderedLinkedListMultiset mediumOrderedList = new OrderedLinkedListMultiset();
-		for(String element : this.smallDataset) {
-			mediumOrderedList.add(element);
-		}
-
-		mediumOrderedList.print();
-	}
-	
-	
-	/*
-	 *  DataStructure : Ordered Linked List
-	 *  Dataset : Large
-	 *  Distribution : Ascending order
-	 *  Operation : Print - Ordered by instance count
-	 */
-	public void testOrderedListPrintWithLargeDatadaset()
-	{
-		// Create a multiset before performing the operation
-		OrderedLinkedListMultiset largeOrderedList = new OrderedLinkedListMultiset();
-		for(String element : this.smallDataset) {
-			largeOrderedList.add(element);
-		}
-
-		largeOrderedList.print();
-	}
-	
-	
 	/*
 	 *  DataStructure : Tree Set
-	 *  Dataset : Small
+	 *  Dataset : Small | Medium | Large
 	 *  Distribution : Random - As per BST properties
 	 *  Operation : Print - Ordered by instance count
 	 */
-	public void testTreeSetPrintWithSmallDatadaset()
+	public void testTreeSetPrint(BstMultiset bstTree, ArrayList<String> dataset)
 	{
-		// Create a multiset before performing the operation
-		BstMultiset smallTreeSet = new BstMultiset();
-		for(String element : this.smallDataset) {
-			smallTreeSet.add(element);
+		long startTime = 0, elapsedTime = 0;
+
+		// Best case - Singly occurance - Loop can be terminated after 1st iterations
+		startTime = TimeUtil.startTime();
+		bstTree.print();
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Worst case - Tree contains duplicate elements
+		int iterations = dataset.size();
+		for(int a = 0 ; a < iterations / 2; a++) {
+			bstTree.add( dataset.get( this.randomUtil.nextInt(iterations - 3) ) );
 		}
 
-		smallTreeSet.print();
+		startTime = TimeUtil.startTime();
+		bstTree.print();
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 	}
-	
-	
-	/*
-	 *  DataStructure : TreeSet
-	 *  Dataset : Medium
-	 *  Distribution : Random - BST Property
-	 *  Operation : Print - Ordered by instance count
-	 */
-	public void testTreeSetPrintWithMediumDatadaset()
-	{
-		// Create a multiset before performing the operation
-		BstMultiset mediumTreeSet = new BstMultiset();
-		for(String element : this.smallDataset) {
-			mediumTreeSet.add(element);
-		}
 
-		mediumTreeSet.print();
-	}
-	
-	
-	/*
-	 *  DataStructure : Tree Set
-	 *  Dataset : Large
-	 *  Distribution : Random
-	 *  Operation : Print - Ordered by instance count
-	 */
-	public void testTreeSetPrintWithLargeDatadaset()
-	{
-		// Create a multiset before performing the operation
-		BstMultiset largeTreeSet = new BstMultiset();
-		for(String element : this.smallDataset) {
-			largeTreeSet.add(element);
-		}
 
-		largeTreeSet.print();
-	}
-	
-	
 	/*
-	 *  DataStructure : OrderedList
-	 *  Dataset : Small
-	 *  Distribution : Ascending order
-	 *  Operation : Intersection
-	 */
-	
-	public void testOrderedListIntersectWithSmallDatadaset()
-	{
-		// New multiset instances
-		OrderedLinkedListMultiset firstOrderedList = new OrderedLinkedListMultiset();
-		OrderedLinkedListMultiset secondOrderedList = new OrderedLinkedListMultiset();
-		
-		// Populating multiset
-		for(String element : this.smallDataset) {
-			firstOrderedList.add(element);
-			secondOrderedList.add(element);
-		}
-		
-		// Testing best case - Both multiset contains the overlapping elements
-		firstOrderedList.intersect(secondOrderedList);
-		
-		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
-		secondOrderedList = new OrderedLinkedListMultiset();
-		for(int a = 0; a < smallDatasetSize; a++) {
-			secondOrderedList.add( this.getDataElement() );
-		}
-		
-		firstOrderedList.intersect(secondOrderedList);
-		
-		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
-		for(int a = 0; a < mediumDatasetSize; a++) {
-			secondOrderedList.add( this.getDataElement() );
-		}
-		
-		firstOrderedList.intersect(secondOrderedList);
-	}
-	
-	
-	/*
-	 *  DataStructure : OrderedList
-	 *  Dataset : Medium
-	 *  Distribution : Ascending order
-	 *  Operation : Intersection
-	 */
-	
-	public void testOrderedListIntersectWithMediumDatadaset()
-	{
-		// New multiset instances
-		OrderedLinkedListMultiset firstOrderedList = new OrderedLinkedListMultiset();
-		OrderedLinkedListMultiset secondOrderedList = new OrderedLinkedListMultiset();
-		
-		// Populating multiset
-		for(String element : this.mediumDataset) {
-			firstOrderedList.add(element);
-			secondOrderedList.add(element);
-		}
-		
-		// Testing best case - Both multiset contains the overlapping elements
-		firstOrderedList.intersect(secondOrderedList);
-		
-		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
-		secondOrderedList = new OrderedLinkedListMultiset();
-		for(int a = 0; a < mediumDatasetSize; a++) {
-			secondOrderedList.add( this.getDataElement() );
-		}
-		
-		firstOrderedList.intersect(secondOrderedList);
-		
-		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
-		for(int a = 0; a < largeDatasetSize; a++) {
-			secondOrderedList.add( this.getDataElement() );
-		}
-		
-		firstOrderedList.intersect(secondOrderedList);
-	}
-	
-	
-	/*
-	 *  DataStructure : OrderedList
-	 *  Dataset : Large
-	 *  Distribution : Ascending order
-	 *  Operation : Intersection
-	 */
-	
-	public void testOrderedListIntersectWithLargeDatadaset()
-	{
-		// New multiset instances
-		OrderedLinkedListMultiset firstOrderedList = new OrderedLinkedListMultiset();
-		OrderedLinkedListMultiset secondOrderedList = new OrderedLinkedListMultiset();
-		
-		// Populating multiset
-		for(String element : this.largeDataset) {
-			firstOrderedList.add(element);
-			secondOrderedList.add(element);
-		}
-		
-		// Testing best case - Both multiset contains the overlapping elements
-		firstOrderedList.intersect(secondOrderedList);
-		
-		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
-		secondOrderedList = new OrderedLinkedListMultiset();
-		for(int a = 0; a < largeDatasetSize; a++) {
-			secondOrderedList.add( this.getDataElement() );
-		}
-		
-		firstOrderedList.intersect(secondOrderedList);
-		
-		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
-		firstOrderedList = new OrderedLinkedListMultiset();
-		for(int a = 0; a < smallDatasetSize; a++) {
-			firstOrderedList.add( this.getDataElement() );
-		}
-		
-		firstOrderedList.intersect(secondOrderedList);
-	}
-	
-	
-	/*
-	 *  DataStructure : TreeSet
-	 *  Dataset : Small
-	 *  Distribution : BST Behaviour
-	 *  Operation : Intersection
-	 */
-	
-	public void testTreeSetIntersectWithSmallDatadaset()
-	{
-		// New multiset instances
-		BstMultiset firstTree = new BstMultiset();
-		BstMultiset secondTree = new BstMultiset();
-		
-		// Populating multiset
-		for(String element : this.smallDataset) {
-			firstTree.add(element);
-			secondTree.add(element);
-		}
-		
-		// Testing best case - Both multiset contains the overlapping elements
-		firstTree.intersect(secondTree);
-		
-		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
-		secondTree = new BstMultiset();
-		for(int a = 0; a < smallDatasetSize; a++) {
-			secondTree.add( this.getDataElement() );
-		}
-		
-		firstTree.intersect(secondTree);
-		
-		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
-		for(int a = 0; a < mediumDatasetSize; a++) {
-			secondTree.add( this.getDataElement() );
-		}
-		
-		firstTree.intersect(secondTree);
-	}
-	
-	
-	/*
-	 *  DataStructure : TreeSet
-	 *  Dataset : Medium
-	 *  Distribution : BST Behaviour
-	 *  Operation : Intersection
-	 */
-	
-	public void testTreeSetIntersectWithMediumDatadaset()
-	{
-		// New multiset instances
-		BstMultiset firstTree = new BstMultiset();
-		BstMultiset secondTree = new BstMultiset();
-		
-		// Populating multiset
-		for(String element : this.mediumDataset) {
-			firstTree.add(element);
-			secondTree.add(element);
-		}
-		
-		// Testing best case - Both multiset contains the overlapping elements
-		firstTree.intersect(secondTree);
-		
-		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
-		secondTree = new BstMultiset();
-		for(int a = 0; a < mediumDatasetSize; a++) {
-			secondTree.add( this.getDataElement() );
-		}
-		
-		firstTree.intersect(secondTree);
-		
-		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
-		for(int a = 0; a < largeDatasetSize; a++) {
-			secondTree.add( this.getDataElement() );
-		}
-		
-		firstTree.intersect(secondTree);
-	}
-	
-	
-	/*
-	 *  DataStructure : TreeSet
-	 *  Dataset : Large
-	 *  Distribution : Ascending order
-	 *  Operation : Intersection
-	 */
-	
-	public void testTreeSetIntersectWithLargeDatadaset()
-	{
-		// New multiset instances
-		BstMultiset firstTree = new BstMultiset();
-		BstMultiset secondTree = new BstMultiset();
-		
-		// Populating multiset
-		for(String element : this.largeDataset) {
-			firstTree.add(element);
-			secondTree.add(element);
-		}
-		
-		// Testing best case - Both multiset contains the overlapping elements
-		firstTree.intersect(secondTree);
-		
-		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
-		secondTree = new BstMultiset();
-		for(int a = 0; a < largeDatasetSize; a++) {
-			secondTree.add( this.getDataElement() );
-		}
-		
-		firstTree.intersect(secondTree);
-		
-		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
-		firstTree = new BstMultiset();
-		for(int a = 0; a < smallDatasetSize; a++) {
-			firstTree.add( this.getDataElement() );
-		}
-		
-		firstTree.intersect(secondTree);
-	}
-	
-	
-	/*
-	 *  DataStructure : Dual OrderedList
-	 *  Dataset : Small
-	 *  Distribution : Ascending order
+	 *  DataStructure : Dual OrderedList List
+	 *  Dataset : Small | Medium | Large
+	 *  Distribution : 1 list maintains the elements ordered by instance count. Other list maintains elements ordered by elements
 	 *  Operation : Add
 	 */
-	
-	public void testDualOrderedListWithSmallDatadaset()
-	{
-		// Create a multiset before performing the operation
-		DualLinkedListMultiset dualList = new DualLinkedListMultiset();
-		for(String element : this.smallDataset) {
-			dualList.add(element);
-		}
 
+	public void testDualOrderedListAdd(DualLinkedListMultiset dualList, ArrayList<String> dataset)
+	{
+		long startTime = 0, elapsedTime = 0;
 
 		// Testing best case - Element to be added is equal to the head element
 		String firstElement = dualList.getHead1().getVal();
-		dualList.add(firstElement);
 
-		// Testing best case - Element to be added is equal to the head element
+		startTime = TimeUtil.startTime();
+		dualList.add(firstElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Testing best case - Element to be added is less than head element.
 		String smallestElement = "a";
+
+		startTime = TimeUtil.startTime();
 		dualList.add(smallestElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
 		// Adding an element which is not present in the string
-		String uniqueElement = "YogeshShriram";
-		dualList.add(uniqueElement);
+		String uniqueElement = "YogeshShriramNotPresentInList";
 
-		// Adding random element
-		String alreadyPresentElement = this.smallDataset.get( this.smallDataset.size() / 2 );
-		dualList.add(alreadyPresentElement);
-		
+		startTime = TimeUtil.startTime();
+		dualList.add(uniqueElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
+		// Practical case - Adding random duplicates
+		int datasetSize = dataset.size();
+		for (int i = 0; i < 5; i++) {
+
+			startTime = TimeUtil.startTime();
+			dualList.add( dataset.get( this.randomUtil.nextInt( datasetSize - 3) ) );
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		}
+
 		// Average case - In between elements
 		// Random cases. Elements could be added in between
 		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
 		for (int i = 0; i < 5; i++) {
-			
+
+			startTime = TimeUtil.startTime();
 			dualList.add( randomStrs[i] );
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 		}
-		
-		//System.out.println(smallOrderedList.print());
+
 	}
 
 
 	/*
 	 *  DataStructure : Dual OrderedList
-	 *  Dataset : Medium
-	 *  Distribution : Ascending order
-	 *  Operation : Add
-	 */
-	
-	public void testDualOrderedListWithMediumDatadaset()
-	{
-
-		DualLinkedListMultiset dualList = new DualLinkedListMultiset();
-
-		// Preparing medium sized dataset
-		for(String element : this.mediumDataset) {
-			dualList.add(element);
-		}
-
-
-		// Testing best case - Element to be added is smaller than head element 
-		// Hence the new element will become new head - No shifting required
-		String smallestElement = "a";
-		dualList.add(smallestElement); 
-
-		// Testing best case - Element to be added is equal to the head element
-		String firstElement = dualList.getHead1().getVal();
-		dualList.add(firstElement);
-
-		// Worst case - Adding an element which is not present in the string
-		// Full list traversal is required. Element will be added at the end
-		String uniqueElement = "YogeshShriramNotPresent";
-		dualList.add(uniqueElement);
-
-		// Average case - Adding random element which is already present in the list
-		// Some list traversal is required. Average case
-		String alreadyPresentElement = this.mediumDataset.get((this.mediumDataset.size() / 2));
-		dualList.add(alreadyPresentElement);
-		
-		// Average case - In between elements
-		// Random cases. Elements could be added in between
-		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"};
-		for (int i = 0; i < 5; i++) {
-			dualList.add( randomStrs[i] );
-		}
-		
-		//System.out.println(dualList.print());
-	}
-	
-
-	/*
-	 *  DataStructure : Dual OrderedList
-	 *  Dataset : Large
-	 *  Distribution : Ascending order
-	 *  Operation : Add
-	 */
-	public void testDualOrderedListWithLargeDatadaset()
-	{
-
-		DualLinkedListMultiset dualList = new DualLinkedListMultiset();
-
-		// Populate the dataset
-		for(String element : this.largeDataset) {
-			dualList.add(element);
-		}
-
-
-		// Testing best case - Element to be added is equal to the head element
-		String firstElement = dualList.getHead1().getVal();
-		dualList.add(firstElement);
-
-		// Testing first case - Element to be added is equal to the head element
-		String smallestElement = "a";
-		dualList.add(smallestElement);
-
-		// Adding an element which is not present in the string
-		String uniqueElement = "YogeshShriramNotInTheList";
-		dualList.add(uniqueElement);
-
-		// Adding random element which is already present in the list
-		String alreadyPresentElement = this.largeDataset.get(  this.largeDataset.size() / 2);
-		dualList.add(alreadyPresentElement);
-		
-		// Random cases. Elements could be added in between
-		String [] randomStrs = { "aaaaa", "ddddd", "hhhhh", "kkkkk", "vvvvv", "rrrrr", "zzzzz"}; 
-		for (int i = 0; i < 5; i++) {
-			dualList.add( randomStrs[i] );
-		}
-		
-		//System.out.println(dualList.print());
-	}
-	
-	
-	
-
-	/*
-	 *  DataStructure : Dual OrderedList
-	 *  Dataset : Small
-	 *  Distribution : Ascending order
+	 *  Dataset : Small | Medium | Large
+	 *  Distribution : 1 list maintains the elements ordered by instance count. Other list maintains elements ordered by elements
 	 *  Operation : Remove
 	 */
-	
-	public void testDualOrderedListRemoveWithSmallDatadaset()
+
+	public void testDualOrderedListRemove(DualLinkedListMultiset dualList, ArrayList<String> dataset, int datasetSize)
 	{
-		// Create a multiset before performing the operation
-		DualLinkedListMultiset dualList = new DualLinkedListMultiset();
-		for(String element : this.smallDataset) {
-			dualList.add(element);
-		}
+		long startTime = 0, elapsedTime = 0;
 
 		// Testing best case - Element to be removed is equal to the head element
 		String firstElement = dualList.getHead1().getVal();
+
+		startTime = TimeUtil.startTime();
 		dualList.removeOne(firstElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
 		// Testing worst case - Largest element to be deleted but not in the list
 		// Entire list to be traversed
 		String largestElement = "YogeshSriramNotInTheList";
+
+		startTime = TimeUtil.startTime();
 		dualList.removeOne(largestElement);
-	
-		
-		// Average case - In between elements
-		// Random cases. Elements could be any where in the list
-		for (int i = 0; i < 5; i++) {
-			dualList.removeOne( this.sortedSmallDataset.get(  this.randomUtil.nextInt( smallDatasetSize - 10 ) ) );
-		}
-	}
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
-
-	/*
-	 *  DataStructure : Dual OrderedList
-	 *  Dataset : Medium
-	 *  Distribution : Ascending order
-	 *  Operation : Remove
-	 */
-	
-	public void testDualOrderedListRemoveWithMediumDatadaset()
-	{
-
-		DualLinkedListMultiset dualList = new DualLinkedListMultiset();
-
-		// Preparing medium sized dataset
-		for(String element : this.mediumDataset) {
-			dualList.add(element);
-		}
-
-
-		// Testing best case - Element to be deleted is equal to the head element
-		String firstElement = dualList.getHead1().getVal();
-		dualList.removeOne(firstElement);
-
-		// Testing worst case - Largest element to be deleted but not in the list
-		// Entire list to be traversed
-		String uniqueElement = "YogeshSriramNotInTheList";
-		dualList.removeOne(uniqueElement);
 
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the list
 		for (int i = 0; i < 5; i++) {
-			dualList.removeOne( this.sortedMediumDataset.get( this.randomUtil.nextInt( mediumDatasetSize - 100 ) ) );
+
+			startTime = TimeUtil.startTime();
+			dualList.removeOne( dataset.get(  this.randomUtil.nextInt( datasetSize - 10 ) ) );
+			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 		}
 	}
-	
-
-	/*
-	 *  DataStructure : Dual Ordered Linked List
-	 *  Dataset : Large
-	 *  Distribution : Ascending order
-	 *  Operation : Remove
-	 */
-	public void testDualOrderedListRemoveWithLargeDatadaset()
-	{
-
-		DualLinkedListMultiset dualList = new DualLinkedListMultiset();
-
-		// Populate the dataset
-		for(String element : this.largeDataset) {
-			dualList.add(element);
-		}
 
 
-		// Testing best case - Element to be deleted is equal to the head element
-		String firstElement = dualList.getHead1().getVal();
-		dualList.removeOne(firstElement);
 
-		
-		// Element to be deleted is largest element and not present in the list
-		String uniqueElement = "YogeshSriramNotInTheList";
-		dualList.removeOne(uniqueElement);
-
-
-		// Average case - In between elements
-		// Random cases. Elements could be any where in the list
-		for (int i = 0; i < 6; i++) {
-			dualList.removeOne( this.sortedLargeDataset.get(this.randomUtil.nextInt( largeDatasetSize - 100 ) ) );
-		}
-	}
-	
-	
-	
 	/*
 	 *  DataStructure : Dual OrderedList
 	 *  Dataset : Small
-	 *  Distribution : Ascending order
+	 *  Distribution : 1 list maintains the elements ordered by instance count. Other list maintains elements ordered by elements
 	 *  Operation : Intersection
 	 */
-	
-	public void testDualOrderedListIntersectWithSmallDatadaset()
+
+	public void testDualOrderedListIntersect(DualLinkedListMultiset FirstDualList, DualLinkedListMultiset SecDualList, int initialDatasetSize, int LargeDatasetSize)
 	{
-		// New multiset instances
-		DualLinkedListMultiset FirstDualList = new DualLinkedListMultiset();
-		DualLinkedListMultiset SecDualList = new DualLinkedListMultiset();
-		
-		// Populating multiset
-		for(String element : this.smallDataset) {
-			FirstDualList.add(element);
-			SecDualList.add(element);
-		}
-		
+
+		long startTime = 0, elapsedTime = 0;
+
+
 		// Testing best case - Both multiset contains the overlapping elements
+		startTime = TimeUtil.startTime();
 		FirstDualList.intersect(SecDualList);
-		
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
 		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
 		SecDualList = new DualLinkedListMultiset();
-		for(int a = 0; a < smallDatasetSize; a++) {
+		for(int a = 0; a < initialDatasetSize; a++) {
 			SecDualList.add( this.getDataElement() );
 		}
-		
+
+		startTime = TimeUtil.startTime();
 		FirstDualList.intersect(SecDualList);
-		
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+
 		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
-		for(int a = 0; a < mediumDatasetSize; a++) {
+		for(int a = 0; a < LargeDatasetSize; a++) {
 			SecDualList.add( this.getDataElement() );
 		}
-		
+
+		startTime = TimeUtil.startTime();
 		FirstDualList.intersect(SecDualList);
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 	}
-	
-	
-	/*
-	 *  DataStructure : Dual OrderedList
-	 *  Dataset : Medium
-	 *  Distribution : Ascending order
-	 *  Operation : Intersection
-	 */
-	
-	public void testDualOrderedListIntersectWithMediumDatadaset()
-	{
-		// New multiset instances
-		DualLinkedListMultiset FirstDualList = new DualLinkedListMultiset();
-		DualLinkedListMultiset SecDualList = new DualLinkedListMultiset();
-		
-		// Populating multiset
-		for(String element : this.mediumDataset) {
-			FirstDualList.add(element);
-			SecDualList.add(element);
-		}
-		
-		// Testing best case - Both multiset contains the overlapping elements
-		FirstDualList.intersect(SecDualList);
-		
-		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
-		SecDualList = new DualLinkedListMultiset();
-		for(int a = 0; a < mediumDatasetSize; a++) {
-			SecDualList.add( this.getDataElement() );
-		}
-		
-		FirstDualList.intersect(SecDualList);
-		
-		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
-		for(int a = 0; a < largeDatasetSize; a++) {
-			SecDualList.add( this.getDataElement() );
-		}
-		
-		FirstDualList.intersect(SecDualList);
-	}
-	
-	
-	/*
-	 *  DataStructure : Dual OrderedList
-	 *  Dataset : Large
-	 *  Distribution : Ascending order
-	 *  Operation : Intersection
-	 */
-	
-	public void testDualOrderedListIntersectWithLargeDatadaset()
-	{
-		// New multiset instances
-		DualLinkedListMultiset FirstDualList = new DualLinkedListMultiset();
-		DualLinkedListMultiset SecDualList = new DualLinkedListMultiset();
-		
-		// Populating multiset
-		for(String element : this.largeDataset) {
-			FirstDualList.add(element);
-			SecDualList.add(element);
-		}
-		
-		// Testing best case - Both multiset contains the overlapping elements
-		FirstDualList.intersect(SecDualList);
-		
-		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
-		SecDualList = new DualLinkedListMultiset();
-		for(int a = 0; a < largeDatasetSize; a++) {
-			SecDualList.add( this.getDataElement() );
-		}
-		
-		FirstDualList.intersect(SecDualList);
-		
-		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
-		FirstDualList = new DualLinkedListMultiset();
-		for(int a = 0; a < smallDatasetSize; a++) {
-			FirstDualList.add( this.getDataElement() );
-		}
-		
-		FirstDualList.intersect(SecDualList);
-	}
-	
-	
-	
+
+
 	/*
 	 *  DataStructure : Dual Ordered Linked List
-	 *  Dataset : Small
-	 *  Distribution : Ascending order
+	 *  Dataset : Small | Medium | Large
+	 *  Distribution : 1 list maintains the elements ordered by instance count. Other list maintains elements ordered by elements
 	 *  Operation : Print - Ordered by instance count
 	 */
-	public void testDualOrderedListPrintWithSmallDatadaset()
+	public void testDualOrderedListPrint(DualLinkedListMultiset dualList, ArrayList<String> dataset)
 	{
-		// Create a multiset before performing the operation
-		DualLinkedListMultiset dualList = new DualLinkedListMultiset();
-
-		for(String element : this.smallDataset) {
-			dualList.add(element);
-		}
+		long startTime = 0, elapsedTime = 0;
 
 		// Testing single occurance complexity
+		startTime = TimeUtil.startTime();
 		dualList.print();
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
-		// Populating duplicates
-		for(int i = 0; i<50; i++) {
-			dualList.add( this.smallDataset.get( this.randomUtil.nextInt(90) ) );
+		// Populating duplicates - Sorting is not required for dual ordered list
+		int datasetSize = dataset.size();
+		for(int i = 0; i < datasetSize/2; i++) {
+			dualList.add( dataset.get( this.randomUtil.nextInt(datasetSize - 5) ) );
 		}
 
+		startTime = TimeUtil.startTime();
 		dualList.print();
-
-		// Add duplicate data to achieve higher complexity
-	}
-
-	/*
-	 *  DataStructure : Dual Ordered Linked List
-	 *  Dataset : Medium
-	 *  Distribution : Ascending order
-	 *  Operation : Print - Ordered by instance count
-	 */
-	public void testDualOrderedListPrintWithMediumDatadaset()
-	{
-		// Create a multiset before performing the operation
-		DualLinkedListMultiset dualList = new DualLinkedListMultiset();
-
-		for(String element : this.smallDataset) {
-			dualList.add(element);
-		}
-
-		dualList.print();
-
-		// Populating duplicates
-		for(int i = 0; i<1000; i++) {
-			dualList.add( this.smallDataset.get( this.randomUtil.nextInt(90) ) );
-		}
-
-		dualList.print();
+		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 	}
 
 
 	/*
-	 *  DataStructure : Dual Ordered Linked List
-	 *  Dataset : Large
-	 *  Distribution : Ascending order
-	 *  Operation : Print - Ordered by instance count
+	 *	Runs the testing for the addition, removeOne, intersection, print functions on Array Implementations of Multiset
+	 *	The respective functions contains the testing code the best and worst cases
+	 *	The test runs on each dataset size 
 	 */
-	public void testDualOrderedListPrintWithLargeDatadaset()
-	{
-		// Create a multiset before performing the operation
-		DualLinkedListMultiset dualList = new DualLinkedListMultiset();
+	public void run_arraySet() {
 
-		for(String element : this.smallDataset) {
-			dualList.add(element);
+		// Initialising the varied sized Array Multisets
+		ArrayMultiset smallArrSet = new ArrayMultiset();
+		ArrayMultiset mediumArrSet = new ArrayMultiset();
+		ArrayMultiset largeArrSet = new ArrayMultiset();
+
+		for (String ele : this.smallDataset) {
+			smallArrSet.add(ele);
 		}
 
-		dualList.print();
-
-		// Populating duplicates - 1/3 of original list
-		for(int i = 0; i<25000; i++) {
-			dualList.add( this.smallDataset.get( this.randomUtil.nextInt(90) ) );
+		for (String ele : this.mediumDataset) {
+			mediumArrSet.add(ele);
 		}
 
-		dualList.print();
+		for (String ele : this.largeDataset) {
+			largeArrSet.add(ele);
+		}
+		// Finished initialising and populating the multisets
+
+
+		// Testing add scenario on each datasize - Each function include best and worst cases
+		this.testArraySetAdd(smallArrSet, this.smallDataset);
+		this.testArraySetAdd(mediumArrSet, this.mediumDataset);
+		this.testArraySetAdd(largeArrSet, this.largeDataset);
+
+		// Testing remove scenario on each datasize - Each function include best and worst cases
+		this.testArraySetRemove(smallArrSet, this.smallDataset, smallDatasetSize);
+		this.testArraySetRemove(mediumArrSet, this.mediumDataset, mediumDatasetSize);
+		this.testArraySetRemove(largeArrSet, this.largeDataset, largeDatasetSize);
+
+		// Testing Print scenario on each datasize - Each function include best and worst cases
+		this.testArraySetPrint(smallArrSet, this.smallDataset);
+		this.testArraySetPrint(mediumArrSet, this.mediumDataset);
+		this.testArraySetPrint(largeArrSet, this.largeDataset);
+
+		// Refrehing the datasets to for the interesection cases - the above operations would affect the multisets
+		smallArrSet = new ArrayMultiset();
+		ArrayMultiset secSmallArrSet = new ArrayMultiset();
+
+		mediumArrSet = new ArrayMultiset();
+		ArrayMultiset secMediumArrSet = new ArrayMultiset();
+
+		largeArrSet = new ArrayMultiset();
+		ArrayMultiset seclLargeArrSet = new ArrayMultiset();
+
+		for (String ele : this.smallDataset) {
+			smallArrSet.add(ele);
+			secSmallArrSet.add(ele);
+		}
+
+		for (String ele : this.mediumDataset) {
+			mediumArrSet.add(ele);
+			secMediumArrSet.add(ele);
+		}
+
+		for (String ele : this.largeDataset) {
+			largeArrSet.add(ele);
+			seclLargeArrSet.add(ele);
+		}
+
+		// Testing the intersect scenario on each datasize
+		this.testArraySetIntersect(smallArrSet, secSmallArrSet, smallDatasetSize, mediumDatasetSize);
+		this.testArraySetIntersect(mediumArrSet, secMediumArrSet, mediumDatasetSize, largeDatasetSize);
+		this.testArraySetIntersect(largeArrSet, seclLargeArrSet, largeDatasetSize, largeDatasetSize);
 	}
-	
-	
+
+
+	/*
+	 *	Runs the testing for the addition, removeOne, intersection, print functions for orderedListSet
+	 *	The respective functions contains the testing code the best and worst cases
+	 *	The test runs on each dataset size 
+	 */
+	public void run_orderedListSet() {
+
+		// Initialising the varied sized OrderedList Multisets
+		OrderedLinkedListMultiset smallSet = new OrderedLinkedListMultiset();
+		OrderedLinkedListMultiset mediumSet = new OrderedLinkedListMultiset();
+		OrderedLinkedListMultiset largeSet = new OrderedLinkedListMultiset();
+
+		for (String ele : this.smallDataset) {
+			smallSet.add(ele);
+		}
+
+		for (String ele : this.mediumDataset) {
+			mediumSet.add(ele);
+		}
+
+		for (String ele : this.largeDataset) {
+			largeSet.add(ele);
+		}
+		// Finished initialising and populating the multisets
+
+		// Testing add scenario on each datasize - Each function include best and worst cases
+		this.testOrderedListAdd(smallSet, this.smallDataset);
+		this.testOrderedListAdd(mediumSet, this.mediumDataset);
+		this.testOrderedListAdd(largeSet, this.largeDataset);
+
+
+		// Testing remove scenario on each datasize - Each function include best and worst cases
+		this.testOrderedListRemove(smallSet, this.sortedSmallDataset, smallDatasetSize);
+		this.testOrderedListRemove(mediumSet, this.sortedMediumDataset, mediumDatasetSize);
+		this.testOrderedListRemove(largeSet, this.sortedLargeDataset, largeDatasetSize);
+
+		// Testing Print scenario on each datasize - Each function include best and worst cases
+		this.testOrderedListPrint(smallSet, this.smallDataset);
+		this.testOrderedListPrint(mediumSet, this.mediumDataset);
+		this.testOrderedListPrint(largeSet, this.largeDataset);
+
+		// Refrehing the datasets to for the interesection cases - the above operations would affect the multisets
+		smallSet = new OrderedLinkedListMultiset();
+		OrderedLinkedListMultiset secSmallArrSet = new OrderedLinkedListMultiset();
+
+		mediumSet = new OrderedLinkedListMultiset();
+		OrderedLinkedListMultiset secMediumArrSet = new OrderedLinkedListMultiset();
+
+		largeSet = new OrderedLinkedListMultiset();
+		OrderedLinkedListMultiset seclLargeArrSet = new OrderedLinkedListMultiset();
+
+		for (String ele : this.smallDataset) {
+			smallSet.add(ele);
+			secSmallArrSet.add(ele);
+		}
+
+		for (String ele : this.mediumDataset) {
+			mediumSet.add(ele);
+			secMediumArrSet.add(ele);
+		}
+
+		for (String ele : this.largeDataset) {
+			largeSet.add(ele);
+			seclLargeArrSet.add(ele);
+		}
+
+		// Testing the intersect scenario on each datasize
+		this.testOrderedListIntersect(smallSet, secSmallArrSet, smallDatasetSize, mediumDatasetSize);
+		this.testOrderedListIntersect(mediumSet, secMediumArrSet, mediumDatasetSize, largeDatasetSize);
+		this.testOrderedListIntersect(largeSet, seclLargeArrSet, largeDatasetSize, largeDatasetSize);
+	}
+
+
+	/*
+	 *	Runs the testing for the addition, removeOne, intersection, print functions for the bstTreeSet
+	 *	The respective functions contains the testing code the best and worst cases
+	 *	The test runs on each dataset size
+	 */
+	public void run_bstTreeSet() {
+
+		// Initialising the varied sized BST Tree Multisets
+		BstMultiset smallSet = new BstMultiset();
+		BstMultiset mediumSet = new BstMultiset();
+		BstMultiset largeSet = new BstMultiset();
+
+		for (String ele : this.smallDataset) {
+			smallSet.add(ele);
+		}
+
+		for (String ele : this.mediumDataset) {
+			mediumSet.add(ele);
+		}
+
+		for (String ele : this.largeDataset) {
+			largeSet.add(ele);
+		}
+		// Finished initialising and populating the multisets
+
+		// Testing add scenario on each datasize - Each function include best and worst cases
+		this.testTreeSetAdd(smallSet, this.sortedSmallDataset);
+		this.testTreeSetAdd(mediumSet, this.sortedMediumDataset);
+		this.testTreeSetAdd(largeSet, this.sortedLargeDataset);
+
+		// Testing remove scenario on each datasize - Each function include best and worst cases
+		this.testTreeSetRemove(smallSet, this.smallDataset, smallDatasetSize);
+		this.testTreeSetRemove(mediumSet, this.mediumDataset, mediumDatasetSize);
+		this.testTreeSetRemove(largeSet, this.largeDataset, largeDatasetSize);
+
+		// Testing Print scenario on each datasize - Each function include best and worst cases
+		this.testTreeSetPrint(smallSet, this.smallDataset);
+		this.testTreeSetPrint(mediumSet, this.mediumDataset);
+		this.testTreeSetPrint(largeSet, this.largeDataset);
+
+		// Refrehing the datasets to for the interesection cases - the above operations would affect the multisets
+		smallSet = new BstMultiset();
+		BstMultiset secSmallArrSet = new BstMultiset();
+
+		mediumSet = new BstMultiset();
+		BstMultiset secMediumArrSet = new BstMultiset();
+
+		largeSet = new BstMultiset();
+		BstMultiset seclLargeArrSet = new BstMultiset();
+
+		for (String ele : this.smallDataset) {
+			smallSet.add(ele);
+			secSmallArrSet.add(ele);
+		}
+
+		for (String ele : this.mediumDataset) {
+			mediumSet.add(ele);
+			secMediumArrSet.add(ele);
+		}
+
+		for (String ele : this.largeDataset) {
+			largeSet.add(ele);
+			seclLargeArrSet.add(ele);
+		}
+
+		// Testing the intersect scenario on each datasize
+		this.testTreeSetIntersect(smallSet, secSmallArrSet, smallDatasetSize, mediumDatasetSize);
+		this.testTreeSetIntersect(mediumSet, secMediumArrSet, mediumDatasetSize, largeDatasetSize);
+		this.testTreeSetIntersect(largeSet, seclLargeArrSet, largeDatasetSize, largeDatasetSize);
+	}
+
+
+	/*
+	 *	Runs the testing for the addition, removeOne, intersection, print functions
+	 *	The respective functions contains the testing code the best and worst cases
+	 *	The test runs on each dataset size 
+	 */
+	public void run_dualSet() {
+
+		// Initialising the varied sized DualLinkedList Multisets
+		DualLinkedListMultiset smallSet = new DualLinkedListMultiset();
+		DualLinkedListMultiset mediumSet = new DualLinkedListMultiset();
+		DualLinkedListMultiset largeSet = new DualLinkedListMultiset();
+
+		for (String ele : this.smallDataset) {
+			smallSet.add(ele);
+		}
+
+		for (String ele : this.mediumDataset) {
+			mediumSet.add(ele);
+		}
+
+		for (String ele : this.largeDataset) {
+			largeSet.add(ele);
+		}
+		// Finished initialising and populating the multisets
+
+		// Testing add scenario on each datasize - Each function include best and worst cases
+		this.testDualOrderedListAdd(smallSet, this.sortedSmallDataset);
+		this.testDualOrderedListAdd(mediumSet, this.sortedMediumDataset);
+		this.testDualOrderedListAdd(largeSet, this.sortedLargeDataset);
+
+
+		// Testing remove scenario on each datasize - Each function include best and worst cases
+		this.testDualOrderedListRemove(smallSet, this.smallDataset, smallDatasetSize);
+		this.testDualOrderedListRemove(mediumSet, this.mediumDataset, mediumDatasetSize);
+		this.testDualOrderedListRemove(largeSet, this.largeDataset, largeDatasetSize);
+
+		// Testing Print scenario on each datasize - Each function include best and worst cases
+		this.testDualOrderedListPrint(smallSet, this.smallDataset);
+		this.testDualOrderedListPrint(mediumSet, this.mediumDataset);
+		this.testDualOrderedListPrint(largeSet, this.largeDataset);
+
+		// Refrehing the datasets to for the interesection cases - the above operations would affect the multisets
+		smallSet = new DualLinkedListMultiset();
+		DualLinkedListMultiset secSmallArrSet = new DualLinkedListMultiset();
+		mediumSet = new DualLinkedListMultiset();
+		DualLinkedListMultiset secMediumArrSet = new DualLinkedListMultiset();
+		largeSet = new DualLinkedListMultiset();
+		DualLinkedListMultiset seclLargeArrSet = new DualLinkedListMultiset();
+
+		for (String ele : this.smallDataset) {
+			smallSet.add(ele);
+			secSmallArrSet.add(ele);
+		}
+
+		for (String ele : this.mediumDataset) {
+			mediumSet.add(ele);
+			secMediumArrSet.add(ele);
+		}
+
+		for (String ele : this.largeDataset) {
+			largeSet.add(ele);
+			seclLargeArrSet.add(ele);
+		}
+
+		// Testing the intersect scenario on each datasize
+		this.testDualOrderedListIntersect(smallSet, secSmallArrSet, smallDatasetSize, mediumDatasetSize);
+		this.testDualOrderedListIntersect(mediumSet, secMediumArrSet, mediumDatasetSize, largeDatasetSize);
+		this.testDualOrderedListIntersect(largeSet, seclLargeArrSet, largeDatasetSize, largeDatasetSize);
+	}
+
+
+	/*
+	 * Calls the testing methods on arrays, orderedList, tree and DualOrderedList
+	 */
+	public void run() {
+
+		long startTime = 0, endTime = 0, elapsedTime = 0, elapsedTimeInMS;
+
+		startTime = System.nanoTime();
+
+		run_arraySet();
+
+		endTime = System.nanoTime();
+		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
+		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds  
+		System.out.println(elapsedTimeInMS);
+
+		startTime = System.nanoTime();
+
+		run_orderedListSet();
+
+		endTime = System.nanoTime();
+		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
+		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds  
+		System.out.println(elapsedTimeInMS);
+
+		startTime = System.nanoTime();
+
+		run_bstTreeSet();
+
+		endTime = System.nanoTime();
+		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
+		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds  
+		System.out.println(elapsedTimeInMS);
+
+		startTime = System.nanoTime();
+
+		run_dualSet();
+
+		endTime = System.nanoTime();
+		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
+		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds  
+		System.out.println(elapsedTimeInMS);
+	}
+
+
+	/*
+	 * Generats the small, medium, and large datasets with the defined sizes
+	 * Initiates the testing
+	 */
 	public static void main(String[] args) {
-		
-		DataGenerator dg = new DataGenerator();
-		
-		dg.generateSmallDataset();
-		dg.generateMediumDataset();
-		dg.generateLargeDataset();
-		
-		long startTime = System.nanoTime();
-		
-		// Testing ordered list implementation - Add
-		dg.testOrderedListWithSmallDatadaset();
-		dg.testOrderedListWithMediumDatadaset();
-		dg.testOrderedListWithLargeDatadaset();
-		
-		
-		// Testing ordered list implementation - remove operation
-		dg.testOrderedListRemoveWithSmallDatadaset();
-		dg.testOrderedListRemoveWithMediumDatadaset();
-		dg.testOrderedListRemoveWithLargeDatadaset();
-		
-		
-		// Testing ordered list implementation - print operation
-		dg.testOrderedListPrintWithSmallDatadaset();
-		dg.testOrderedListPrintWithMediumDatadaset();
-		dg.testOrderedListPrintWithLargeDatadaset();
-		
-		
-		// Testing ordered list implementation - intersection operation
-		dg.testOrderedListIntersectWithSmallDatadaset();
-		dg.testOrderedListIntersectWithMediumDatadaset();
-		dg.testOrderedListIntersectWithLargeDatadaset();
-		
-				
-		// Testing BST implementation for the add operation
-		dg.testTreeSetWithSmallDatadaset();
-		dg.testTreeSetWithMediumDatadaset();
-		dg.testTreeSetWithLargeDatadaset();
-		
-		
-		// Testing BST implementation - Remove operation
-		dg.testTreeSetRemoveWithSmallDatadaset();
-		dg.testTreeSetRemoveWithMediumDatadaset();
-		dg.testTreeSetRemoveWithLargeDatadaset();
 
-		
-		// Testing BST implementation for the - intersection
-		dg.testTreeSetIntersectWithSmallDatadaset();
-		dg.testTreeSetIntersectWithMediumDatadaset();
-		dg.testTreeSetIntersectWithLargeDatadaset();
-		
-		
-		// Testing treeset list implementaion print operation
-		dg.testTreeSetPrintWithSmallDatadaset();
-		dg.testTreeSetPrintWithMediumDatadaset();
-		dg.testTreeSetPrintWithLargeDatadaset();
-		
-		
-		// Testing Dual Ordered List - Add 
-		dg.testDualOrderedListWithSmallDatadaset();
-		dg.testDualOrderedListWithMediumDatadaset();
-		dg.testDualOrderedListWithLargeDatadaset();
-		
-		
-		// Testing Dual Ordered List - Remove
-		dg.testDualOrderedListRemoveWithSmallDatadaset();
-		dg.testDualOrderedListRemoveWithMediumDatadaset();
-		dg.testDualOrderedListRemoveWithLargeDatadaset();
-		
-		
-		// Testing Dual Ordered List - Intersect
-		dg.testDualOrderedListIntersectWithSmallDatadaset();
-		dg.testDualOrderedListIntersectWithMediumDatadaset();
-		dg.testDualOrderedListIntersectWithLargeDatadaset();
-		
-		
-		// Testing Dual Ordered List Print()
-		dg.testDualOrderedListPrintWithSmallDatadaset();
-		dg.testDualOrderedListPrintWithMediumDatadaset();
-		dg.testDualOrderedListPrintWithLargeDatadaset();
-		
-		
-		// Testing ArrayMultiset 
-		
-		// Small Dataset
-		ArrayMultiset arrayMultiset = new ArrayMultiset();
-		for(String str : dg.smallDataset) {
-			arrayMultiset.add(str);
-		}
-		
-		dg.testArraySetAdd(arrayMultiset);
-		
-		// Testing best case - Unique Elements with occurance 1 - Can be terminiated with N comparisons
-		dg.testArraySetPrint(arrayMultiset);
-		
-		// Testing worst case - Random elements with random occurances
-		for(int i = 0; i<50; i++) {
-			arrayMultiset.add( dg.smallDataset.get( dg.randomUtil.nextInt( smallDatasetSize - 1) ) );
-		}
-		dg.testArraySetPrint(arrayMultiset);
-		
-
-		// Medium Dataset
-		arrayMultiset = new ArrayMultiset();
-		for(String str : dg.mediumDataset) {
-			arrayMultiset.add(str);
-		}
-
-		dg.testArraySetAdd(arrayMultiset);
-
-		
-		// Testing best case - Unique Elements with occurance 1 - Can be terminiated with N comparisons
-		dg.testArraySetPrint(arrayMultiset);
-		
-		
-		// Testing worst case - Random elements with random occurances
-		for(int i = 0; i<500; i++) {
-			arrayMultiset.add( dg.mediumDataset.get( dg.randomUtil.nextInt( mediumDatasetSize - 1) ) );
-		}
-		dg.testArraySetPrint(arrayMultiset);
-		
-		
-		// Large Dataset
-		arrayMultiset = new ArrayMultiset();
-		for(String str : dg.largeDataset) {
-			arrayMultiset.add(str);
-		}
-		
-		dg.testArraySetAdd(arrayMultiset);
-		
-		// Testing best case - Unique Elements with occurance 1 - Can be terminiated with N comparisons
-		dg.testArraySetPrint(arrayMultiset);
-
-
-		// Testing worst case - Random elements with random occurances
-		for(int i = 0; i<largeDatasetSize/2; i++) {
-			arrayMultiset.add( dg.largeDataset.get( dg.randomUtil.nextInt( largeDatasetSize - 1) ) );
-		}
-		dg.testArraySetPrint(arrayMultiset);
-
-
-		// Testing ArrayMultiset Remove Operation
-		
-		// Small dataset
-		arrayMultiset = new ArrayMultiset();
-		for(String str : dg.smallDataset) {
-			arrayMultiset.add(str);
-		}
-		
-		dg.testArraySetRemove(arrayMultiset, dg.smallDataset, smallDatasetSize);
-		
-		
-		// Medium Dataset
-		arrayMultiset = new ArrayMultiset();
-		for(String str : dg.mediumDataset) {
-			arrayMultiset.add(str);
-		}
-		dg.testArraySetRemove(arrayMultiset, dg.mediumDataset, mediumDatasetSize);
-		
-		
-		// Large Dataset
-		arrayMultiset = new ArrayMultiset();
-		for(String str : dg.largeDataset) {
-			arrayMultiset.add(str);
-		}
-		dg.testArraySetRemove(arrayMultiset, dg.largeDataset, largeDatasetSize);
-
-
-		
-		// Interect operations
-		ArrayMultiset firstArrayMultiset = new ArrayMultiset();
-		ArrayMultiset secondArrayMultiset = new ArrayMultiset();
-		
-		for(String element : dg.smallDataset) {
-			firstArrayMultiset.add(element);
-			secondArrayMultiset.add(element);
-		}
-		
-		firstArrayMultiset.intersect(secondArrayMultiset);
-		
-		
-		// No or few common elements
-		secondArrayMultiset = new ArrayMultiset();
-		for(int a = 0; a < smallDatasetSize; a++) {
-			secondArrayMultiset.add( dg.getDataElement() );
-		}
-		
-		
-		firstArrayMultiset.intersect(secondArrayMultiset);	
-		
-		
-		long endTime = System.nanoTime();
-		long durationInNano = (endTime - startTime);  //Total execution time in nano seconds
-
-		//Same duration in millis
-
-		long durationInMillis = TimeUnit.NANOSECONDS.toMillis(durationInNano);  //Total execution time in nano seconds
-
-		System.out.println(durationInNano);
-		System.out.println(durationInMillis / 1000);
-		
-		// Testing the Dual ordered implementation for the add operation
-		
+		DataGenerator driver = new DataGenerator();
+		driver.generateSmallDataset();
+		driver.generateMediumDataset();
+		driver.generateLargeDataset();
+		driver.run();
 	}
-	
+
 }
