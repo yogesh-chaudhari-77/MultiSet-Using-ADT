@@ -216,8 +216,30 @@ public class BstMultiset extends RmitMultiset
 	@Override
 	public String print() {
 
+<<<<<<< Updated upstream
 		// Placeholder, please update.
 		return new String();
+=======
+		// Clone the multiset in Array implementation. This is required because, we need to print element based on it's onccurance count
+		ArrayMultiset multisetArr = new ArrayMultiset();
+
+		TreeNode curr = this.getSmallestElementFromTree( this.getRoot() );
+		
+		// Iterate over current list
+		while(curr != null) {
+			
+			for (int i = 0; i < curr.getOccuranceCount(); i++) {
+//				System.out.println(curr.getVal());
+				multisetArr.add(curr.getVal());
+			}
+			
+			curr = this.getInoderSucc(curr);
+		}
+		
+		// This method returns the string representation of the multiset sorted based on occurance count
+		return multisetArr.print();
+		
+>>>>>>> Stashed changes
 	} // end of OrderedPrint
 
 
