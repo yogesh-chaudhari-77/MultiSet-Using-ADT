@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+
 /**
  * Dual linked list implementation of a multiset.  See comments in RmitMultiset to
  * understand what each overriden method is meant to do.
  *
  * @author Jeffrey Chan & Yongli Ren, RMIT 2020
+ * @Contributors Sriram Senthilnathan, RMIT University, Master of Information Technology
  */
 public class DualLinkedListMultiset extends RmitMultiset
 {
@@ -94,14 +96,15 @@ public class DualLinkedListMultiset extends RmitMultiset
         	        	this.listLength++;
         			}
         		}
-//        	System.out.println("Checkpoint 1");
         	}
 
         	//Adding an element to the list2 and maintaining order based on Instance Count
         	{
         			ListNode prevNode2 = list2Head;
         			ListNode currNode2 = list2Head;
+
         			ListNode nextNode2 = currNode2.getNext();
+              
         			boolean elementFound2 = false;
             		//If an element is already present in the list, then just incrementing the instance count
             		while(currNode2 != null && !elementFound2)
@@ -154,22 +157,23 @@ public class DualLinkedListMultiset extends RmitMultiset
         }	
     	
     	ListNode printNode = list1Head;
-    	System.out.println("List 1 based on Element order");
+
+    	//System.out.println("List 1 based on Element order");
     	while(printNode != null)
     	{
-    		System.out.println ("Node Value: " + printNode.getVal() + "       Instance Count: " + printNode.getOccuranceCount());
+    		////System.out.println ("Node Value: " + printNode.getVal() + "       Instance Count: " + printNode.getOccuranceCount());
     		printNode = printNode.getNext();
     	}
     	
     	ListNode printNode2 = list2Head;
-    	System.out.println("List 2 based on Instance count order");
+    	// //System.out.println("List 2 based on Instance count order");
     	while(printNode2 != null)
     	{
-    		System.out.println ("Node Value: " + printNode2.getVal() + "       Instance Count: " + printNode2.getOccuranceCount());
+    		////System.out.println ("Node Value: " + printNode2.getVal() + "       Instance Count: " + printNode2.getOccuranceCount());
     		printNode2 = printNode2.getNext();
     	}
-    	System.out.println("List length : " + this.listLength);
-    	// Implement me!
+    	//System.out.println("List length : " + this.listLength);
+
     } // end of add()
 
 
@@ -502,7 +506,7 @@ public class DualLinkedListMultiset extends RmitMultiset
         return newMultiset;
     } // end of difference()
 
-
+    
     public ListNode getHead1()
     {
     	return this.list1Head;
@@ -640,22 +644,24 @@ public class DualLinkedListMultiset extends RmitMultiset
         }	
     	
     	ListNode printNode = list1Head;
-    	System.out.println("List 1 based on Element order");
+
+    	//System.out.println("List 1 based on Element order");
     	while(printNode != null)
     	{
-    		System.out.println ("Node Value: " + printNode.getVal() + "       Instance Count: " + printNode.getOccuranceCount());
+    		//System.out.println ("Node Value: " + printNode.getVal() + "       Instance Count: " + printNode.getOccuranceCount());
     		printNode = printNode.getNext();
     	}
     	
     	ListNode printNode2 = list2Head;
-    	System.out.println("List 2 based on Instance count order");
+    	//System.out.println("List 2 based on Instance count order");
     	while(printNode2 != null)
     	{
-    		System.out.println ("Node Value: " + printNode2.getVal() + "       Instance Count: " + printNode2.getOccuranceCount());
+    		//System.out.println ("Node Value: " + printNode2.getVal() + "       Instance Count: " + printNode2.getOccuranceCount());
     		printNode2 = printNode2.getNext();
     	}
-    	System.out.println("List length : " + this.listLength);
-    	// Implement me!
+    	//System.out.println("List length : " + this.listLength);
+      
     } // end of add()
 
 } // end of class DualLinkedListMultiset
+

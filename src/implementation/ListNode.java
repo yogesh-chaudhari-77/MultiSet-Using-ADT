@@ -1,5 +1,9 @@
 package implementation;
 
+
+/**
+ * @Author Yogeshwar Chaudhari, RMIT University, Master of Information Technology
+ */
 public class ListNode{
 
 	// Stores the actual node value

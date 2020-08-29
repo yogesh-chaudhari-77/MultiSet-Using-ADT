@@ -1,21 +1,47 @@
 package implementation;
 
+/**
+ * Class defines the blueprint of Node used in Tree Data Structure
+ * 
+ * @Author Yogeshwar Chaudhari, RMIT University, Master of Information Technology
+ * @contributor : Sriram Senthilnathan 
+ */
+
 public class TreeNode{
 	
+	// Stores the value of the node
 	private String val;
+	
+	// Stores the occurance count of the value in the tree
+	private int occuranceCount;
+	
+	// Pointer to left child
 	private TreeNode left;
+	
+	// Pointer to right child
 	private TreeNode right;
+	
+	// Pointer to parent node
 	private TreeNode parent;
 	
 	public TreeNode() {
 		val = null;
+		occuranceCount = 0;
 		left = null;
 		right = null;
 		parent = null;
 	}
 	
 	public TreeNode(String val) {
+
 		this.val = val;
+		
+		// New tree node is being created. So it must be 1
+		this.occuranceCount = 1;
+		
+		left = null;
+		right = null;
+		parent = null;
 	}
 
 	public String getVal() {
@@ -49,4 +75,32 @@ public class TreeNode{
 	public void setParent(TreeNode parent) {
 		this.parent = parent;
 	}
+
+	public int getOccuranceCount() {
+		return occuranceCount;
+	}
+
+	public void setOccuranceCount(int occuranceCount) {
+		this.occuranceCount = occuranceCount;
+	}
+	
+	
+	// To be called after adding the node which is already present
+	public void OccuranceCountPlus1() {
+		this.setOccuranceCount( this.getOccuranceCount() + 1 );
+	}
+
+	// To be called after remove a node which is already present
+	public void OccuranceCountMinus1() {
+		this.setOccuranceCount( this.getOccuranceCount() - 1 );	
+	}
+
+	@Override
+	public String toString() {
+		return "TreeNode [val=" + val + ", occuranceCount=" + occuranceCount + ", left=" + left + ", right=" + right
+				+ ", parent=" + parent + "]";
+	}
+	
+	
+	
 }

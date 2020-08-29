@@ -1,0 +1,17 @@
+create s1
+add s1 a
+add s1 b
+add s1 c
+print s1
+create s2
+add s2 d
+add s2 e
+add s2 f
+print s2
+union s1 s2 s3
+print s3
+intersect s1 s2 s4
+print s4
+difference s1 s2 s5
+print s5
+quit

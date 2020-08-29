@@ -1,1 +1,3 @@
 https://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/
+
+https://www.javatpoint.com/deletion-in-binary-search-tree
