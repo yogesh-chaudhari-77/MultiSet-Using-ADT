@@ -123,8 +123,6 @@ public class DataGenerator {
 		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
 		// Adding random duplicates
-
-
 		int datasetSize = dataset.size();
 		for(int i = 0; i < 5; i++) {
 
