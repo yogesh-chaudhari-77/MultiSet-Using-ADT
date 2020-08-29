@@ -20,31 +20,31 @@ public class TimeUtil {
 	 * @param startTime - nanoTime
 	 * @param timeUnit - milli, seconds, micro
 	 */
-	public static long elapsedTime(long startTime, String timeUnit) {
+	public static double elapsedTime(long startTime, String timeUnit) {
 
 		long endTime = System.nanoTime();
-		long elapsedTime = (long)(endTime - startTime);  //Total elapsed time - nano seconds
+		long elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
 
-		long convertedElapsedTime = convertTime(elapsedTime, timeUnit);
+		double convertedElapsedTime = convertTime(elapsedTime, timeUnit);
 
 		return convertedElapsedTime;
 	}
 
 	
-	public static long elapsedTime(long startTime, long endTime, String timeUnit) {
+	public static double elapsedTime(long startTime, long endTime, String timeUnit) {
 
-		long elapsedTime = (long)(endTime - startTime);  //Total elapsed time - nano seconds
+		long elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
 		
-		long convertedElapsedTime = convertTime(elapsedTime, timeUnit);
+		double convertedElapsedTime = convertTime(elapsedTime, timeUnit);
 		
 		return convertedElapsedTime;
 
 	}
 	
 
-	public static long convertTime(long duration, String timeUnit) {
+	public static double convertTime(long duration, String timeUnit) {
 
-		long retTime = 0; 
+		double retTime = 0; 
 		
 		switch(timeUnit) {
 		case "milli":
@@ -53,7 +53,8 @@ public class TimeUtil {
 
 			// 29-08-2020 - Required for analysis purpose
 		case "seconds":
-			retTime = TimeUnit.NANOSECONDS.toSeconds(duration);		// Converted to milli seconds
+			retTime = (double) duration / 1000000000;
+//			TimeUnit.NANOSECONDS.toSeconds(duration);		// Converted to milli seconds
 			break;
 		}
 
