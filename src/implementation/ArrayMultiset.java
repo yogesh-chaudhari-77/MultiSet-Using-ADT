@@ -167,8 +167,8 @@ public class ArrayMultiset extends RmitMultiset
     			break;
     		}
     	}
-    	if (!elementFound)
-    		System.out.println("No such element exist in the multiset");
+//    	if (!elementFound)
+//    		System.out.println("No such element exist in the multiset");
     } // end of removeOne()
 
 

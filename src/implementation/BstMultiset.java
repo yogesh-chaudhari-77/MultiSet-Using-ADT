@@ -371,7 +371,6 @@ public class BstMultiset extends RmitMultiset
 		while(curr != null) {
 			
 			for (int i = 0; i < curr.getOccuranceCount(); i++) {
-				System.out.println(curr.getVal());
 				multisetArr.add(curr.getVal());
 			}
 			

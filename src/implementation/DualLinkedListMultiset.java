@@ -1,7 +1,8 @@
-package implementation;
+//package implementation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 
 /**
@@ -95,14 +96,15 @@ public class DualLinkedListMultiset extends RmitMultiset
         	        	this.listLength++;
         			}
         		}
-//        	//System.out.println("Checkpoint 1");
         	}
 
         	//Adding an element to the list2 and maintaining order based on Instance Count
         	{
         			ListNode prevNode2 = list2Head;
         			ListNode currNode2 = list2Head;
-//        			ListNode nextNode2 = currNode2.getNext();
+
+        			ListNode nextNode2 = currNode2.getNext();
+              
         			boolean elementFound2 = false;
             		//If an element is already present in the list, then just incrementing the instance count
             		while(currNode2 != null && !elementFound2)
@@ -155,6 +157,7 @@ public class DualLinkedListMultiset extends RmitMultiset
         }	
     	
     	ListNode printNode = list1Head;
+
     	//System.out.println("List 1 based on Element order");
     	while(printNode != null)
     	{
@@ -504,12 +507,11 @@ public class DualLinkedListMultiset extends RmitMultiset
     } // end of difference()
 
     
-    
     public ListNode getHead1()
     {
     	return this.list1Head;
     }
-    
+
 
     public ListNode getHead2()
     {
@@ -642,6 +644,7 @@ public class DualLinkedListMultiset extends RmitMultiset
         }	
     	
     	ListNode printNode = list1Head;
+
     	//System.out.println("List 1 based on Element order");
     	while(printNode != null)
     	{
@@ -657,7 +660,7 @@ public class DualLinkedListMultiset extends RmitMultiset
     		printNode2 = printNode2.getNext();
     	}
     	//System.out.println("List length : " + this.listLength);
-    	// Implement me!
+      
     } // end of add()
 
 } // end of class DualLinkedListMultiset
