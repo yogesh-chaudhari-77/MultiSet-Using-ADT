@@ -291,8 +291,13 @@ public class BstMultiset extends RmitMultiset
 			// If the occurance count gets to 0, then need to actually delete element
 			if(t.getOccuranceCount() == 0) {
 				
-				// Set the parent's left to deleted nodes left
-				t.getParent().setLeft(t.getLeft());
+				if(t.getParent().getLeft() == t) {
+					// Set the parent's left to deleted node's left
+					t.getParent().setLeft(t.getLeft());	
+				}else {
+					// Set the parent's right to deleted node's left
+					t.getParent().setRight(t.getLeft());
+				}
 				
 				// Set the deleted node's left's parent to deleted node's parent
 				t.getLeft().setParent( t.getParent() );
@@ -305,12 +310,20 @@ public class BstMultiset extends RmitMultiset
 			
 			t.OccuranceCountMinus1();
 			
-			
+
+			// Update the parent and child pointers if the node has to be actually deleted
 			if(t.getOccuranceCount() == 0) {
 				
-				// Update the parent and child pointers if the node has to be actually deleted
-				t.getParent().setRight(t.getRight());
-				t.getRight().setParent( t.getParent() );
+				if(t.getParent().getLeft() == t) {
+					// Set the parent's left to deleted node's right
+					t.getParent().setLeft(t.getRight());	
+				}else {
+					
+					//Set the parent's right to deleted node's right
+					t.getParent().setRight(t.getRight());
+				}
+				
+				t.getRight().setParent(t.getParent());
 				t = null;
 				return;
 			}
@@ -328,11 +341,21 @@ public class BstMultiset extends RmitMultiset
 				
 				// Check if the inorder successor has right child
 				if(inOrderSucc.getRight() != null) {
-					
-					// Right child to be attached as swapped nodes right child
-					t.setRight( inOrderSucc.getRight() );
-					inOrderSucc.getRight().setParent(t);
-					inOrderSucc.setParent(null);
+
+					// And the deleted node also has right child
+					if(t.getRight() != null) {
+						
+						// Inorder's right becomes left of inorder's parent
+						inOrderSucc.getParent().setLeft(inOrderSucc.getRight());
+						inOrderSucc.getRight().setParent(inOrderSucc.getParent());
+						inOrderSucc = null;
+
+					}else {
+						// Right child to be attached as swapped nodes right child
+						t.setRight( inOrderSucc.getRight() );
+						inOrderSucc.getRight().setParent(t);
+						inOrderSucc.setParent(null);
+					}
 					return;
 					
 				}else if (t.getRight() != null) {
