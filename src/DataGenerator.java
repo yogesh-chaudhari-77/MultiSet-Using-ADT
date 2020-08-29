@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-
 import javax.naming.InitialContext;
 
 public class DataGenerator {
@@ -102,40 +101,29 @@ public class DataGenerator {
 	 *  Operation : Add
 	 */
 
-	public void testArraySetAdd(ArrayMultiset arrayMultiset, ArrayList<String> dataset)
+	public void testArraySetAdd(ArrayMultiset arrayMultiset, ArrayList<String> dataset, String setSizeStr )
 	{	
+		long startTime = 0, endTime = 0, elapsedTime = 0;
+
 		// Testing best case - Adding duplicate element. First one.
 		// Expecting no shifts
-//		long startTime = 0, elapsedTime = 0;
-//		double elapsedTimeInS = 0.0;
-
-		long startTime = 0, endTime = 0, elapsedTime = 0, elapsedTimeInMS;
-		double elapsedTimeInS;
-
-		
-
 		String firstElement = arrayMultiset.getArray()[0].getElement();
 
 		startTime = System.nanoTime();		
+			arrayMultiset.add(firstElement);
+		elapsedTime = TimeUtil.elapsedTime(startTime, System.nanoTime(), "seconds");
+		System.out.println(",uiure ,eoruoeir, eouroer ");
 		
-		arrayMultiset.add(firstElement);
 		
-		endTime = System.nanoTime();
-//		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-//		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-//		elapsedTimeInS = (double)elapsedTime/1000000;						// Converted to Seconds
-//		System.out.print(",Best Case," + elapsedTimeInS +",");
-
-
 		// Worst case 1 - Element is not present in the list
 
 		startTime = TimeUtil.startTime();
 		String uniqueElement = "YogeshShriramNotPresentInSet";
 		arrayMultiset.add(uniqueElement);
 		
-//		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
-//		elapsedTimeInS = (double)elapsedTime /1000;
-//		System.out.print(",Worst Case," + elapsedTimeInS +",");
+		elapsedTime = TimeUtil.elapsedTime(startTime, System.nanoTime(), "seconds");
+
+		System.out.print(",Worst Case," + elapsedTime +",");
 
 
 		// Adding random duplicates
@@ -146,9 +134,8 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			arrayMultiset.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
-			elapsedTimeInS = (double)elapsedTime /1000;
-
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
+			elapsedTimeInS = (double)elapsedTime / 1000;
 		}
 
 
@@ -158,7 +145,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			arrayMultiset.add( randomStrs[i] );
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 			elapsedTimeInS = (double)elapsedTime /1000;
 
 		}
@@ -182,7 +169,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		arrayMultiset.removeOne(firstElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 
 		// Testing worst case - Largest element to be deleted but not in the list
@@ -191,7 +178,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		arrayMultiset.removeOne(largestElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Worst / Average case - In between elements
 		// Random cases. Elements could be any where in the list
@@ -199,7 +186,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			arrayMultiset.removeOne( dataset.get( this.randomUtil.nextInt( dataSetSize - 10 ) ) );
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 	}
 
@@ -219,7 +206,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		arrayMultiset.print();
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Worst case - Random duplicate elements are present
 
@@ -231,7 +218,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		arrayMultiset.print();
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 	}
 
 
@@ -249,7 +236,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		first.intersect(second);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Worst case - no elements are overlapping - Loop will run n1xn2 times
 		second = new ArrayMultiset();
@@ -259,7 +246,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		first.intersect(second);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Worse case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
 		for(int a = 0; a < largeSetSize; a++) {
@@ -268,7 +255,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		first.intersect(second);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 	}
 
 
@@ -287,7 +274,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		orderedList.add(firstElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 
 		// Testing best case - Element to be added is equal to the head element
@@ -295,7 +282,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		orderedList.add(smallestElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Worst case - Adding an element which is not present in the string hence will be added at last
 		// Expecting 1 complete traversal.
@@ -303,7 +290,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		orderedList.add(uniqueElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Adding random duplicates
 		int datasetSize = dataset.size();
@@ -311,7 +298,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			orderedList.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 
 		// Average case - In between elements
@@ -321,7 +308,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			orderedList.add( randomStrs[i] );
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 	}
 
@@ -341,7 +328,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		orderedList.removeOne(firstElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Testing worst case - Largest element to be deleted but not in the list
 		// Entire list to be traversed
@@ -349,7 +336,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		orderedList.removeOne(largestElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 
 		// Average case - In between elements
@@ -357,7 +344,7 @@ public class DataGenerator {
 		for (int i = 0; i < 5; i++) {
 			startTime = TimeUtil.startTime();
 			orderedList.removeOne( sortedDataSet.get( this.randomUtil.nextInt( datasetSize - 10 ) ) );
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 	}
 
@@ -377,7 +364,7 @@ public class DataGenerator {
 		// Testing best case - Both multiset contains the overlapping elements. running time is n1 as n1 == n2
 		startTime = TimeUtil.startTime();
 		firstOrderedList.intersect(secondOrderedList);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 
 		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
@@ -388,7 +375,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		firstOrderedList.intersect(secondOrderedList);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
 		for(int a = 0; a < LargeDatasetSize; a++) {
@@ -398,7 +385,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		firstOrderedList.intersect(secondOrderedList);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 	}
 
 
@@ -416,7 +403,7 @@ public class DataGenerator {
 		// Best case : All unique elements - Bubble sort can be stopped in first iteration
 		startTime = TimeUtil.startTime();
 		orderedList.print();
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 
 		// Ordered List contains duplicate elements
@@ -428,7 +415,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		orderedList.print();
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 	}
 
 	/*
@@ -447,13 +434,13 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		bstSet.add(rootVal);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Worst case - Adding an element which is not present in the string
 		String uniqueElement = "YogeshShriram";
 		startTime = TimeUtil.startTime();
 		bstSet.add(uniqueElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Adding random duplicates
 		int datasetSize = dataset.size();
@@ -461,7 +448,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			bstSet.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 
 		// Usual cases - In between elements - Random insertions
@@ -470,7 +457,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			bstSet.add( randomStrs[i] );
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 
 
@@ -487,20 +474,20 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		bstSet.add(rootVal);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 
 		// Worst case - Adding an element which is not present in the string
 		startTime = TimeUtil.startTime();
 		bstSet.add(uniqueElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Adding random duplicates
 		for(int i = 0; i < 5; i++) {
 
 			startTime = TimeUtil.startTime();
 			bstSet.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 
 		// Usually cases - In between elements - Random insertions
@@ -508,7 +495,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			bstSet.add( randomStrs[i] );
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 
 		/*
@@ -524,7 +511,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			bstSet.add(ele);
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 
 		//  Best case - Element to be added is equal to the root element
@@ -532,26 +519,26 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		bstSet.add(rootVal);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Worst case - Adding an element which is not present in the string
 		startTime = TimeUtil.startTime();
 		bstSet.add(uniqueElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Adding random duplicates
 		for(int i = 0; i < 5; i++) {
 
 			startTime = TimeUtil.startTime();
 			bstSet.add( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ));
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 
 		// Usually cases - In between elements - Random insertions
 		for (int i = 0; i < 5; i++) {
 			startTime = TimeUtil.startTime();
 			bstSet.add( randomStrs[i] );
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 
 		/*
@@ -576,7 +563,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		bstSet.removeOne(rootVal);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Average case - In between elements
 		// Random cases. Elements could be any where in the tree
@@ -584,7 +571,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			bstSet.removeOne( dataset.get( this.randomUtil.nextInt( datasetSize - 10 ) ) );
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 
 	}
@@ -604,7 +591,7 @@ public class DataGenerator {
 		// Testing best case - Both multiset contains the overlapping elements
 		startTime = TimeUtil.startTime();
 		firstTree.intersect(secondTree);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
 		secondTree = new BstMultiset_NOT_IN_USE();
@@ -614,7 +601,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		firstTree.intersect(secondTree);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
 		for(int a = 0; a < largeDatasetSize; a++) {
@@ -623,7 +610,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		firstTree.intersect(secondTree);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 	}
 
 
@@ -641,7 +628,7 @@ public class DataGenerator {
 		// Best case - Singly occurance - Loop can be terminated after 1st iterations
 		startTime = TimeUtil.startTime();
 		bstTree.print();
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Worst case - Tree contains duplicate elements
 		int iterations = dataset.size();
@@ -651,7 +638,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		bstTree.print();
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 	}
 
 
@@ -671,21 +658,21 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		dualList.add(firstElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Testing best case - Element to be added is less than head element.
 		String smallestElement = "a";
 
 		startTime = TimeUtil.startTime();
 		dualList.add(smallestElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Adding an element which is not present in the string
 		String uniqueElement = "YogeshShriramNotPresentInList";
 
 		startTime = TimeUtil.startTime();
 		dualList.add(uniqueElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Practical case - Adding random duplicates
 		int datasetSize = dataset.size();
@@ -693,7 +680,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			dualList.add( dataset.get( this.randomUtil.nextInt( datasetSize - 3) ) );
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 
 		// Average case - In between elements
@@ -703,7 +690,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			dualList.add( randomStrs[i] );
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 
 	}
@@ -725,7 +712,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		dualList.removeOne(firstElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Testing worst case - Largest element to be deleted but not in the list
 		// Entire list to be traversed
@@ -733,7 +720,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		dualList.removeOne(largestElement);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 
 		// Average case - In between elements
@@ -742,7 +729,7 @@ public class DataGenerator {
 
 			startTime = TimeUtil.startTime();
 			dualList.removeOne( dataset.get(  this.randomUtil.nextInt( datasetSize - 10 ) ) );
-			elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+			elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 		}
 	}
 
@@ -764,7 +751,7 @@ public class DataGenerator {
 		// Testing best case - Both multiset contains the overlapping elements
 		startTime = TimeUtil.startTime();
 		FirstDualList.intersect(SecDualList);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
 		SecDualList = new DualLinkedListMultiset();
@@ -774,7 +761,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		FirstDualList.intersect(SecDualList);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Testing best case - 1 set is relatively large and another relatively small - running time would be min(n1,n2)
 		for(int a = 0; a < LargeDatasetSize; a++) {
@@ -783,7 +770,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		FirstDualList.intersect(SecDualList);
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 	}
 
 
@@ -800,7 +787,7 @@ public class DataGenerator {
 		// Testing single occurance complexity
 		startTime = TimeUtil.startTime();
 		dualList.print();
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 
 		// Populating duplicates - Sorting is not required for dual ordered list
 		int datasetSize = dataset.size();
@@ -810,7 +797,7 @@ public class DataGenerator {
 
 		startTime = TimeUtil.startTime();
 		dualList.print();
-		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
+		elapsedTime = TimeUtil.elapsedTime(startTime, "seconds");
 	}
 
 
@@ -821,11 +808,11 @@ public class DataGenerator {
 	 */
 	public void run_arraySet() {
 		
-		long startTime = 0, endTime = 0, elapsedTime = 0, elapsedTimeInMS;
-		double elapsedTimeInS;	
-
-		
-
+		/*
+		 * long startTime = 0, endTime = 0, elapsedTime = 0, elapsedTimeInMS; double
+		 * elapsedTimeInS;
+		 */
+	
 		// Initialising the varied sized Array Multisets
 		ArrayMultiset smallArrSet = new ArrayMultiset();
 		ArrayMultiset mediumArrSet = new ArrayMultiset();
@@ -846,100 +833,116 @@ public class DataGenerator {
 
 
 		// Testing add scenario on each datasize - Each function include best and worst cases
-		startTime = System.nanoTime();		
+//		startTime = System.nanoTime();		
 		
-		this.testArraySetAdd(smallArrSet, this.smallDataset);		
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-		elapsedTimeInS = (double)elapsedTime/1000000000;						// Converted to Seconds
-		System.out.print(",ArrayAdd,SmallDataset," + elapsedTimeInS +"\n" );
+		this.testArraySetAdd(smallArrSet, this.smallDataset, "small");
 		
-		startTime = System.nanoTime();	
+		
+//		endTime = System.nanoTime();
+//		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
+//		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
+//		elapsedTimeInS = (double)elapsedTime/1000000000;						// Converted to Seconds
+//		System.out.print(",ArrayAdd,SmallDataset," + elapsedTimeInS +"\n" );
+		
+//		startTime = System.nanoTime();	
 		
 		this.testArraySetAdd(mediumArrSet, this.mediumDataset);
 
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-		elapsedTimeInS = (double)elapsedTime/1000000000;						// Converted to Seconds
-		System.out.print(",ArrayAdd,MediumDataset," + elapsedTimeInS +"\n" );
+		/*
+		 * endTime = System.nanoTime(); elapsedTime = (endTime - startTime); //Total
+		 * elapsed time - nano seconds elapsedTimeInMS =
+		 * TimeUnit.NANOSECONDS.toMillis(elapsedTime); // Converted to milli seconds
+		 * elapsedTimeInS = (double)elapsedTime/1000000000; // Converted to Seconds
+		 * System.out.print(",ArrayAdd,MediumDataset," + elapsedTimeInS +"\n" );
+		 */
 		
 		
-		startTime = System.nanoTime();	
+//		startTime = System.nanoTime();	
 
 		this.testArraySetAdd(largeArrSet, this.largeDataset);
 
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-		elapsedTimeInS = (double)elapsedTime/1000000000;						// Converted to Seconds
-		System.out.print(",ArrayAdd,largeDataset," + elapsedTimeInS +"\n" );
+		/*
+		 * elapsedTime = (endTime - startTime); //Total elapsed time - nano seconds
+		 * elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime); // Converted to
+		 * milli seconds elapsedTimeInS = (double)elapsedTime/1000000000; // Converted
+		 * to Seconds System.out.print(",ArrayAdd,largeDataset," + elapsedTimeInS +"\n"
+		 * );
+		 */
 		
 		
 		// Testing remove scenario on each datasize - Each function include best and worst cases
 		
-		startTime = System.nanoTime();		
+		/* startTime = System.nanoTime(); */
 		
 		this.testArraySetRemove(smallArrSet, this.smallDataset, smallDatasetSize);
 
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-		elapsedTimeInS = (double)elapsedTime/1000000000;						// Converted to Seconds
-		System.out.print(",ArrayRemove,SmallDataset," + elapsedTimeInS +"\n" );
-		
-		startTime = System.nanoTime();		
-
+		/*
+		 * endTime = System.nanoTime(); elapsedTime = (endTime - startTime); //Total
+		 * elapsed time - nano seconds elapsedTimeInMS =
+		 * TimeUnit.NANOSECONDS.toMillis(elapsedTime); // Converted to milli seconds
+		 * elapsedTimeInS = (double)elapsedTime/1000000000; // Converted to Seconds
+		 * System.out.print(",ArrayRemove,SmallDataset," + elapsedTimeInS +"\n" );
+		 * 
+		 * startTime = System.nanoTime();
+		 */
 		this.testArraySetRemove(mediumArrSet, this.mediumDataset, mediumDatasetSize);
-		
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-		elapsedTimeInS = (double)elapsedTime/1000000000;						// Converted to Seconds
-		System.out.print(",ArrayRemove,MediumDataset," + elapsedTimeInS +"\n" );
-		
-		startTime = System.nanoTime();		
-
+		/*
+		 * endTime = System.nanoTime(); elapsedTime = (endTime - startTime); //Total
+		 * elapsed time - nano seconds elapsedTimeInMS =
+		 * TimeUnit.NANOSECONDS.toMillis(elapsedTime); // Converted to milli seconds
+		 * elapsedTimeInS = (double)elapsedTime/1000000000; // Converted to Seconds
+		 * System.out.print(",ArrayRemove,MediumDataset," + elapsedTimeInS +"\n" );
+		 * 
+		 * startTime = System.nanoTime();
+		 */
 		this.testArraySetRemove(largeArrSet, this.largeDataset, largeDatasetSize);
 		
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-		elapsedTimeInS = (double)elapsedTime/1000000000;						// Converted to Seconds
-		System.out.print(",ArrayRemove,LargeDataset," + elapsedTimeInS +"\n" );
-
-		// Testing Print scenario on each datasize - Each function include best and worst cases
-		startTime = System.nanoTime();		
+		/*
+		 * endTime = System.nanoTime(); elapsedTime = (endTime - startTime); //Total
+		 * elapsed time - nano seconds elapsedTimeInMS =
+		 * TimeUnit.NANOSECONDS.toMillis(elapsedTime); // Converted to milli seconds
+		 * elapsedTimeInS = (double)elapsedTime/1000000000; // Converted to Seconds
+		 * System.out.print(",ArrayRemove,LargeDataset," + elapsedTimeInS +"\n" );
+		 * 
+		 * // Testing Print scenario on each datasize - Each function include best and
+		 * worst cases startTime = System.nanoTime();
+		 */
 
 		this.testArraySetPrint(smallArrSet, this.smallDataset);
 		
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-		elapsedTimeInS = (double)elapsedTime/1000000000;						// Converted to Seconds
-		System.out.print(",ArrayPrint,SmallDataset," + elapsedTimeInS +"\n" );
-		
-		startTime = System.nanoTime();		
+		/*
+		 * endTime = System.nanoTime(); elapsedTime = (endTime - startTime); //Total
+		 * elapsed time - nano seconds elapsedTimeInMS =
+		 * TimeUnit.NANOSECONDS.toMillis(elapsedTime); // Converted to milli seconds
+		 * elapsedTimeInS = (double)elapsedTime/1000000000; // Converted to Seconds
+		 * System.out.print(",ArrayPrint,SmallDataset," + elapsedTimeInS +"\n" );
+		 * 
+		 * startTime = System.nanoTime();
+		 */
 
 		this.testArraySetPrint(mediumArrSet, this.mediumDataset);
 
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-		elapsedTimeInS = (double)elapsedTime/1000000000;						// Converted to Seconds
-		System.out.print(",ArrayPrint,MediumDataset," + elapsedTimeInS +"\n" );
-		
-		startTime = System.nanoTime();		
+		/*
+		 * endTime = System.nanoTime(); elapsedTime = (endTime - startTime); //Total
+		 * elapsed time - nano seconds elapsedTimeInMS =
+		 * TimeUnit.NANOSECONDS.toMillis(elapsedTime); // Converted to milli seconds
+		 * elapsedTimeInS = (double)elapsedTime/1000000000; // Converted to Seconds
+		 * System.out.print(",ArrayPrint,MediumDataset," + elapsedTimeInS +"\n" );
+		 * 
+		 * startTime = System.nanoTime();
+		 */
 
 		this.testArraySetPrint(largeArrSet, this.largeDataset);
 
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-		elapsedTimeInS = (double)elapsedTime/1000000000;						// Converted to Seconds
-		System.out.print(",ArrayPrint,LargeDataset," + elapsedTimeInS +"\n" );
+		/*
+		 * endTime = System.nanoTime(); elapsedTime = (endTime - startTime); //Total
+		 * elapsed time - nano seconds elapsedTimeInMS =
+		 * TimeUnit.NANOSECONDS.toMillis(elapsedTime); // Converted to milli seconds
+		 * elapsedTimeInS = (double)elapsedTime/1000000000; // Converted to Seconds
+		 * System.out.print(",ArrayPrint,LargeDataset," + elapsedTimeInS +"\n" );
+		 * 
+		 */
 		
-
 		// Refrehing the datasets to for the interesection cases - the above operations would affect the multisets
 		smallArrSet = new ArrayMultiset();
 		ArrayMultiset secSmallArrSet = new ArrayMultiset();
@@ -1550,48 +1553,48 @@ public class DataGenerator {
 	 */
 	public void run() {
 
-		long startTime = 0, endTime = 0, elapsedTime = 0, elapsedTimeInMS;
-		double elapsedTimeInS;
-
-		startTime = System.nanoTime();
+//		long startTime = 0, endTime = 0, elapsedTime = 0, elapsedTimeInMS;
+//		double elapsedTimeInS;
+//
+//		startTime = System.nanoTime();
 
 		run_arraySet();
 
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-		elapsedTimeInS = (double)elapsedTimeInMS/1000;						// Converted to Seconds
-		System.out.println("Array Total: " + elapsedTimeInMS);
-
-		startTime = System.nanoTime();
+//		endTime = System.nanoTime();
+//		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
+//		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
+//		elapsedTimeInS = (double)elapsedTimeInMS/1000;						// Converted to Seconds
+//		System.out.println("Array Total: " + elapsedTimeInMS);
+//
+//		startTime = System.nanoTime();
 
 		run_orderedListSet();
 
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds  
-		elapsedTimeInS = (double)elapsedTimeInMS/1000;						// Converted to Seconds
-		System.out.println("OrderedList Total: " + elapsedTimeInMS);
-
-		startTime = System.nanoTime();
+//		endTime = System.nanoTime();
+//		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
+//		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds  
+//		elapsedTimeInS = (double)elapsedTimeInMS/1000;						// Converted to Seconds
+//		System.out.println("OrderedList Total: " + elapsedTimeInMS);
+//
+//		startTime = System.nanoTime();
 
 		run_bstTreeSet();
 
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds  
-		elapsedTimeInS = (double)elapsedTimeInMS/1000;						// Converted to Seconds
-		System.out.println("BST Total: " + elapsedTimeInMS);								
-
-		startTime = System.nanoTime();
+//		endTime = System.nanoTime();
+//		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
+//		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds  
+//		elapsedTimeInS = (double)elapsedTimeInMS/1000;						// Converted to Seconds
+//		System.out.println("BST Total: " + elapsedTimeInMS);								
+//
+//		startTime = System.nanoTime();
 
 		run_dualSet();
 
-		endTime = System.nanoTime();
-		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
-		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
-		elapsedTimeInS = (double)elapsedTimeInMS/1000;						// Converted to Seconds
-		System.out.println("DualLinkedList Total: " + elapsedTimeInMS);
+//		endTime = System.nanoTime();
+//		elapsedTime = (endTime - startTime);  //Total elapsed time - nano seconds
+//		elapsedTimeInMS = TimeUnit.NANOSECONDS.toMillis(elapsedTime);		// Converted to milli seconds
+//		elapsedTimeInS = (double)elapsedTimeInMS/1000;						// Converted to Seconds
+//		System.out.println("DualLinkedList Total: " + elapsedTimeInMS);
 	}
 
 
@@ -1602,9 +1605,13 @@ public class DataGenerator {
 	public static void main(String[] args) {
 
 		DataGenerator driver = new DataGenerator();
+		
+		// Prepare datasets
 		driver.generateSmallDataset();
 		driver.generateMediumDataset();
 		driver.generateLargeDataset();
+		
+		// Initiate testing
 		driver.run();
 	}
 
