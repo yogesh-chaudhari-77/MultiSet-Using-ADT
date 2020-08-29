@@ -21,6 +21,10 @@ import java.util.Stack;
    [3] Binary Search Tree | Set 2 (Delete) - GeeksforGeeks
    Binary Search Tree | Set 2 (Delete) - GeeksforGeeks (2014). Available at: https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/ (Accessed: 26 August 2020).
    
+   [4] BST check
+   A program to check if a binary tree is BST or not - GeeksforGeeks
+   A program to check if a binary tree is BST or not - GeeksforGeeks (2009). Available at: https://www.geeksforgeeks.org/a-program-to-check-if-a-binary-tree-is-bst-or-not/ (Accessed: 29 August 2020).
+   
    Lecture notes
  */
 public class BstMultiset extends RmitMultiset
@@ -378,6 +382,13 @@ public class BstMultiset extends RmitMultiset
 				}
 			}
 		}
+		
+		
+		if (isBST(root,null,null)) {
+			System.out.print("Valid");
+		}
+	    else 
+	    	System.out.print("Invalid"); 
 
 	} // end of removeOne()
 
@@ -633,6 +644,33 @@ public class BstMultiset extends RmitMultiset
 		}
 		
 		return null;
+	}
+	
+	// https://www.geeksforgeeks.org/a-program-to-check-if-a-binary-tree-is-bst-or-not/
+	/**
+	 * Validates if the given tree is BST or not  
+	 * @param root
+	 * @param leftNode
+	 * @param righNode
+	 * @return
+	 */
+	static boolean isBST(TreeNode root, TreeNode leftNode, TreeNode righNode)  
+	{  
+	    // Basic condn
+	    if (root == null)  
+	        return true;  
+	  
+	    // Left node's data should be less than root / parent node's data
+	    if (leftNode != null && root.getVal().compareTo(leftNode.getVal()) <= 0)  
+	        return false;
+	  
+	    // Right node's data should be greater than root / parent node's data  
+	    if (righNode != null && root.getVal().compareTo(righNode.getVal()) >= 0)  
+	        return false;  
+	  
+	    // Do this all nodes
+	    return isBST(root.getLeft(), leftNode, root) &&  
+	        isBST(root.getRight(), root, righNode);  
 	}
 
 } // end of class BstMultiset
