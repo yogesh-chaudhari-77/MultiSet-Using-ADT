@@ -437,7 +437,7 @@ public class DataGenerator {
 	 *  Distribution : BST Behaviour
 	 *  Operation : Add
 	 */
-	public void testTreeSetAdd(BstMultiset bstSet, ArrayList<String> dataset) 
+	public void testTreeSetAdd(BstMultiset_NOT_IN_USE bstSet, ArrayList<String> dataset) 
 	{
 		long startTime = 0, elapsedTime = 0;
 
@@ -566,7 +566,7 @@ public class DataGenerator {
 	 *  Operation : Remove
 	 */
 
-	public void testTreeSetRemove(BstMultiset bstSet, ArrayList<String> dataset, int datasetSize)
+	public void testTreeSetRemove(BstMultiset_NOT_IN_USE bstSet, ArrayList<String> dataset, int datasetSize)
 	{
 
 		long startTime = 0, elapsedTime = 0;
@@ -597,7 +597,7 @@ public class DataGenerator {
 	 *  Operation : Intersection
 	 */
 
-	public void testTreeSetIntersect(BstMultiset firstTree, BstMultiset secondTree, int initialDatasetSize, int largeDatasetSize)
+	public void testTreeSetIntersect(BstMultiset_NOT_IN_USE firstTree, BstMultiset_NOT_IN_USE secondTree, int initialDatasetSize, int largeDatasetSize)
 	{
 		long startTime = 0, elapsedTime = 0;
 
@@ -607,7 +607,7 @@ public class DataGenerator {
 		elapsedTime = TimeUtil.elapsedTime(startTime, "milli");
 
 		// Testing best case - no elements are overlapping - Expecting loop to run only min(n1,n2) times
-		secondTree = new BstMultiset();
+		secondTree = new BstMultiset_NOT_IN_USE();
 		for(int a = 0; a < initialDatasetSize; a++) {
 			secondTree.add( this.getDataElement() );
 		}
@@ -634,7 +634,7 @@ public class DataGenerator {
 	 *  Distribution : Random - As per BST properties
 	 *  Operation : Print - Ordered by instance count
 	 */
-	public void testTreeSetPrint(BstMultiset bstTree, ArrayList<String> dataset)
+	public void testTreeSetPrint(BstMultiset_NOT_IN_USE bstTree, ArrayList<String> dataset)
 	{
 		long startTime = 0, elapsedTime = 0;
 
@@ -1235,9 +1235,9 @@ public class DataGenerator {
 		double elapsedTimeInS;		
 
 		// Initialising the varied sized BST Tree Multisets
-		BstMultiset smallSet = new BstMultiset();
-		BstMultiset mediumSet = new BstMultiset();
-		BstMultiset largeSet = new BstMultiset();
+		BstMultiset_NOT_IN_USE smallSet = new BstMultiset_NOT_IN_USE();
+		BstMultiset_NOT_IN_USE mediumSet = new BstMultiset_NOT_IN_USE();
+		BstMultiset_NOT_IN_USE largeSet = new BstMultiset_NOT_IN_USE();
 
 		for (String ele : this.smallDataset) {
 			smallSet.add(ele);
@@ -1365,14 +1365,14 @@ public class DataGenerator {
 
 */
 		// Refrehing the datasets to for the interesection cases - the above operations would affect the multisets
-		smallSet = new BstMultiset();
-		BstMultiset secSmallArrSet = new BstMultiset();
+		smallSet = new BstMultiset_NOT_IN_USE();
+		BstMultiset_NOT_IN_USE secSmallArrSet = new BstMultiset_NOT_IN_USE();
 
-		mediumSet = new BstMultiset();
-		BstMultiset secMediumArrSet = new BstMultiset();
+		mediumSet = new BstMultiset_NOT_IN_USE();
+		BstMultiset_NOT_IN_USE secMediumArrSet = new BstMultiset_NOT_IN_USE();
 
-		largeSet = new BstMultiset();
-		BstMultiset seclLargeArrSet = new BstMultiset();
+		largeSet = new BstMultiset_NOT_IN_USE();
+		BstMultiset_NOT_IN_USE seclLargeArrSet = new BstMultiset_NOT_IN_USE();
 
 		for (String ele : this.smallDataset) {
 			smallSet.add(ele);

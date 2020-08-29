@@ -95,6 +95,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
 	
 	// custom method for union
+	// [2]
 	public void add(String item, int occuranceCount) {
 
 		// If there is no list, create a head node
@@ -156,6 +157,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
 	} // end of add()
 
+	
 	@Override
 	public int search(String item) {
 

@@ -47,7 +47,7 @@ public class MultisetImplCreator
      		    multiset = new OrderedLinkedListMultiset();
      			break;
      		case "bst":
-     		    multiset = new BstMultiset();
+     		    multiset = new BstMultiset_NOT_IN_USE();
      		    break;
             case "duallinkedlist":
               	multiset = new DualLinkedListMultiset();
