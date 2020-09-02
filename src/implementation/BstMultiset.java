@@ -436,33 +436,33 @@ public class BstMultiset extends RmitMultiset
 			if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) < 0) {
 
 				retSet.add( firstTreePtr.getVal(), firstTreePtr.getOccuranceCount() );
-				firstTreePtr = getInoderSucc(firstTreePtr);
+				firstTreePtr = getInoderSucc2(firstTreePtr);
 
 			}else if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) > 0) {
 				// If the second node is smaller, add that to retSet and advance to it's inorder-successor
 				
 				retSet.add( secTreePtr.getVal(), secTreePtr.getOccuranceCount() );
-				secTreePtr = getInoderSucc(secTreePtr);
+				secTreePtr = getInoderSucc2(secTreePtr);
 
 			}else if(firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) == 0) {
 				// Both node have same value, add node to BST with (ocurr(n1) + ocurr(n2)) and advance both to their respective in-order
 				
 				retSet.add( firstTreePtr.getVal(), (firstTreePtr.getOccuranceCount() + secTreePtr.getOccuranceCount() ));
-				firstTreePtr = getInoderSucc(firstTreePtr);
-				secTreePtr = getInoderSucc(secTreePtr);
+				firstTreePtr = getInoderSucc2(firstTreePtr);
+				secTreePtr = getInoderSucc2(secTreePtr);
 			}
 		}
 
 		// Exhausted second tree but first tree has elements
 		while(firstTreePtr != null) {
 			retSet.add(firstTreePtr.getVal(), firstTreePtr.getOccuranceCount());
-			firstTreePtr = getInoderSucc(firstTreePtr);
+			firstTreePtr = getInoderSucc2(firstTreePtr);
 		}
 
 		// Exhausted first free tree but second tree has elements
 		while(secTreePtr != null) {
 			retSet.add( secTreePtr.getVal(), secTreePtr.getOccuranceCount() );
-			secTreePtr = getInoderSucc(secTreePtr);
+			secTreePtr = getInoderSucc2(secTreePtr);
 		}
 
 		return retSet;
@@ -484,12 +484,12 @@ public class BstMultiset extends RmitMultiset
 			if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) < 0) {
 
 				// Just advance the first node
-				firstTreePtr = getInoderSucc(firstTreePtr);
+				firstTreePtr = getInoderSucc2(firstTreePtr);
 
 			}else if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) > 0) {
 				// First node is larger than second element that also means no common elements. Just advance the second tree
 
-				secTreePtr = getInoderSucc(secTreePtr);
+				secTreePtr = getInoderSucc2(secTreePtr);
 
 			}else if(firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) == 0) {
 				// Common element found. 
@@ -497,8 +497,8 @@ public class BstMultiset extends RmitMultiset
 				retSet.add( firstTreePtr.getVal(), Math.min(firstTreePtr.getOccuranceCount(), secTreePtr.getOccuranceCount() ));
 
 				// Since common element, advance both cursors
-				firstTreePtr = getInoderSucc(firstTreePtr);
-				secTreePtr = getInoderSucc(secTreePtr);
+				firstTreePtr = getInoderSucc2(firstTreePtr);
+				secTreePtr = getInoderSucc2(secTreePtr);
 			}
 		}
 
@@ -526,12 +526,12 @@ public class BstMultiset extends RmitMultiset
 				retSet.add( firstTreePtr.getVal(), firstTreePtr.getOccuranceCount() );
 
 				// Get the inorder successor of the tree
-				firstTreePtr = getInoderSucc(firstTreePtr);
+				firstTreePtr = getInoderSucc2(firstTreePtr);
 
 			}else if( firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) > 0) {
 				// First node is greater than second node. Hence we don't need it. Just advance the second tree in this case 
 
-				secTreePtr = getInoderSucc(secTreePtr);
+				secTreePtr = getInoderSucc2(secTreePtr);
 
 			}else if(firstTreePtr.getVal().compareTo( secTreePtr.getVal() ) == 0) {
 
@@ -542,15 +542,15 @@ public class BstMultiset extends RmitMultiset
 				}
 
 				// Advance both trees
-				firstTreePtr = getInoderSucc(firstTreePtr);
-				secTreePtr = getInoderSucc(secTreePtr);
+				firstTreePtr = getInoderSucc2(firstTreePtr);
+				secTreePtr = getInoderSucc2(secTreePtr);
 			}
 		}
 
 		// 18-08-2020 - All remaining elements if any in the firstSet will be part of the results
 		while(firstTreePtr != null) {
 			retSet.add(firstTreePtr.getVal(), firstTreePtr.getOccuranceCount());
-			firstTreePtr = getInoderSucc(firstTreePtr);
+			firstTreePtr = getInoderSucc2(firstTreePtr);
 		}
 
 		return retSet;
@@ -561,7 +561,7 @@ public class BstMultiset extends RmitMultiset
 	/* [6]
 	 * Find the inorder-successsor of the given element
 	 */
-	private TreeNode getInoderSucc(TreeNode givenEle) {
+	public TreeNode getInoderSucc(TreeNode givenEle) {
 
 		TreeNode t = givenEle;
 
@@ -601,6 +601,38 @@ public class BstMultiset extends RmitMultiset
 
 			return inOrderSucc;
 		}
+	}
+	
+	
+	/*
+	 * Find the inorder-successsor of the element
+	 */
+	private TreeNode getInoderSucc2(TreeNode givenEle) {
+
+		// Right subtree is not empty. in order successor is smallest element in the right substree.
+		TreeNode t = givenEle;
+
+		if(t.getRight() != null) {
+
+			t = t.getRight();
+			while(t.getLeft() != null) {
+				t = t.getLeft();
+			}
+
+			return t;
+		}
+
+		// Right Subtree is empty. 
+		// Start from given element. This is required to reduce the time complexity and well as same elements can occure in the multiset
+		TreeNode parent = t.getParent();
+
+		// Traverse upwards to find successor
+		while(parent != null && parent.getRight() == t) {
+			t = parent;
+			parent = t.getParent();
+		}
+
+		return parent;
 	}
 
 

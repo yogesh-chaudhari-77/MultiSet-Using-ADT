@@ -252,6 +252,7 @@ public class DataGenerator {
 
 
 		// Single occurance - Best case for array
+
 		startTime = System.nanoTime();		
 		arrayMultiset.print();
 		elapsedTime = TimeUtil.elapsedTime(startTime, System.nanoTime(), "seconds");
@@ -263,6 +264,7 @@ public class DataGenerator {
 		for(int a = 0 ; a < iterations; a++) {
 			arrayMultiset.add( dataset.get( this.randomUtil.nextInt(iterations - 3) ) );
 		}
+
 
 		startTime = System.nanoTime();		
 		arrayMultiset.print();
@@ -1515,23 +1517,15 @@ public class DataGenerator {
 	public void run() {
 
 		run_arraySet();
-		
+
 		run_orderedListSet();
-		
+
 		run_bstTreeSet();
-		
+
 		run_dualSet();
 
 	}
 
-	
-	public void checkSize() {
-		System.out.println(">>>>>>"+this.getSmallDataset().size());
-		System.out.println(this.getDoubleSmallDataset().size());
-		System.out.println(this.getMediumDataset().size());
-		System.out.println(this.getDoubleMediumDataset().size());
-		System.out.println(this.getLargeDataset().size());
-	}
 
 	/*
 	 * Generats the small, medium, and large datasets with the defined sizes
@@ -1552,8 +1546,6 @@ public class DataGenerator {
 
 		// Initiate testing
 		driver.run();
-		
-		System.gc();
 	}
 
 	
